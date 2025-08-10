@@ -5,7 +5,7 @@ import Image from 'next/image';
 export default function TopDecorations() {
   return (
     <div className='overflow-y-hidden'>
-      <Image
+      {/* <Image
         src="/home/top-left.png"
         alt="Top left decoration"
         draggable={false}
@@ -23,7 +23,7 @@ export default function TopDecorations() {
         height={362}
         priority
         className="absolute top-0 rotate-y-180 right-0 w-full h-auto z-10 overflow-hidden"
-      />
+      /> */}
     </div>
   )
 }
