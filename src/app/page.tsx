@@ -1,9 +1,23 @@
 import Image from "next/image";
+import "@/styles/home.css"; // keep your CSS for global background if needed
+import Timeline from "@/components/Timeline"; 
 
 export default function Home() {
   return (
-    <div className="min-h-screen min-w-screen overflow-x-hidden flex items-center justify-center">
-      <h1 className="text-9xl text-center w-full">HALLOO SELAMAT BEKERJA ADIK ADIK !</h1>
-    </div>
+    <main className="min-h-screen relative overflow-hidden flex flex-col items-center">
+      {/* Logo */}
+      <Image
+        src="/home/logo-nplc.webp"
+        alt="NPLC 13th Logo"
+        draggable={false}
+        width={500}
+        height={300}
+        priority
+        className="mt-24 z-20 max-w-[80%] h-auto"
+      />
+
+      {/* Timeline */}
+      <Timeline/>
+    </main>
   );
 }
