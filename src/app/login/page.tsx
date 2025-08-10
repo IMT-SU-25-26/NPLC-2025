@@ -54,12 +54,12 @@ export default function LoginPage() {
                 />
                 <span>Remember Me</span>
               </label>
-              <a
+              <Link
                 href="#"
                 className="text-yellow-400 hover:underline font-space-mono"
               >
                 Forgot Password?
-              </a>
+              </Link>
             </div>
 
             {/* Login Button */}
