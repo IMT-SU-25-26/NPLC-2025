@@ -1,6 +1,6 @@
 import Image from "next/image";
 import "@/app/styles/home.css"; // keep your CSS for global background if needed
-import Timeline from "@/app/components/Timeline"; 
+import Timeline from "@/components/Timeline"; 
 
 export default function Home() {
   return (
