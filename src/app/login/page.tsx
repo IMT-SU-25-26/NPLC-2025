@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -82,12 +83,12 @@ export default function LoginPage() {
             {/* Register Link */}
             <div className="text-center text-sm sm:mb-6 -mt-4 sm:text-xl font-space-mono">
               <span className="text-white">Don&#39;t have an account? </span>
-              <a
-                href="#"
+              <Link
+                href="/register"
                 className="text-yellow-400 hover:underline"
               >
                 Register
-              </a>
+              </Link>
             </div>
           </div>
         </div>
