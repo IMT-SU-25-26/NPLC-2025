@@ -4,8 +4,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   return (
-    <div className="overflow-x-hidden">
-      <div className="overflow-hidden flex flex-col items-center min-h-screen w-screen max-w-screen">
+    <div className="pt-[10%] overflow-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
         <Image
           src="/home/logo-nplc.webp"
           alt="NPLC 13th Logo"
@@ -93,6 +92,5 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
