@@ -18,6 +18,8 @@ export default function Home() {
           className="mt-24 z-20 max-w-[80%] h-auto"
         />
 
+        <div className="mt-10"></div>
+
         {/* Timeline */}
         <Timeline />
       </main>

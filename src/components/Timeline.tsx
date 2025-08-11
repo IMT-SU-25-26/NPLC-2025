@@ -59,8 +59,8 @@ export default function EventTimeline() {
                       isUp ? "absolute -top-28" : "absolute top-16"
                     }`}
                   >
-                    <p className="font-bold">{event.date}</p>
-                    <p className="text-sm opacity-80">{event.label}</p>
+                    <p className="opacity-80 font-space-mono">{event.date}</p>
+                    <p className="text-sm font-ibmplex-mono-bold">{event.label}</p>
                   </div>
                 </div>
               );
