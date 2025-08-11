@@ -1,11 +1,41 @@
 'use client'
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
-function page() {
+gsap.registerPlugin(ScrollTrigger);
+
+function Page() {
+  const container = useRef(null);
+
+  useGSAP(() => {
+    // Animate the front city image
+    gsap.to(".city-front", {
+      y: -100, // Moves up more
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5, // Smoother scrubbing
+      },
+    });
+
+    // Animate the back city image
+    gsap.to(".city-back", {
+      y: -50, // Moves up less to create depth
+      scrollTrigger: {
+        trigger: container.current,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.5,
+      },
+    });
+  }, { scope: container });
+
   return (
-    <div className="pt-[20%] sm:pt-[10%] overflow-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
+    <div ref={container} className="relative pt-[20%] sm:pt-[10%] overflow-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
       <Image
         src="/home/logo-nplc.webp"
         alt="NPLC 13th Logo"
@@ -15,49 +45,12 @@ function page() {
         priority
         className="mt-12 sm:mt-5 w-[80%] sm:w-[40%] h-auto"
       />
+      {/* Added classNames for GSAP targeting and performance */}
+      <Image src={"/business-plan-regis/dot-bg.webp"} width={100} height={50} className="dot-bg absolute bottom-[-20%] w-full h-auto right-0 z-0 will-change-transform" alt="city background 1"/>
+      <Image src={"/business-plan-regis/city-depan.svg"} width={100} height={50} className="city-front absolute bottom-[-5%] w-full h-auto right-0 z-1 will-change-transform" alt="city background 1"/>
+      <Image src={"/business-plan-regis/city-back.svg"} width={100} height={100} className="city-back absolute bottom-0 w-[60%] h-auto right-0 z-0 will-change-transform" alt="city background 1"/>
 
-      {/* old
-      <div className="mt-[10%] sm:mt-[1.5%] tab-button-container grid justify-items-center w-fit items-center grid-cols-2 sm:grid-cols-4 gap-4">
-        <Image
-          src="/buttons/unselected-programming-button.svg"
-          alt="button1"
-          draggable={false}
-          width={200}
-          height={200}
-          priority
-          className="w-[8rem] sm:w-[11rem] h-auto"
-        />
-        <Image
-          src="/buttons/unselected-type-racer-button.svg"
-          alt="button2"
-          draggable={false}
-          width={200}
-          height={200}
-          priority
-          className="w-[8rem] sm:w-[11rem] h-auto"
-        />
-        <Image
-          src="/buttons/selected-business-plan-button.svg"
-          alt="button3"
-          draggable={false}
-          width={200}
-          height={200}
-          priority
-          className="w-[8rem] sm:w-[11rem] h-auto"
-        />
-        <Image
-          src="/buttons/unselected-prompting-button.svg"
-          alt="button4"
-          draggable={false}
-          width={200}
-          height={200}
-          priority
-          className="w-[8rem] sm:w-[11rem] h-auto"
-        />
-      </div> */}
-
-      {/* new */}
-      <div className="mt-[10%] sm:mt-[1.5%] tab-button-container flex w-full justify-center items-center">
+      <div className="z-2 mt-[10%] sm:mt-[1.5%] tab-button-container flex w-full justify-center items-center">
         <Image
           src="/buttons/selected-business-plan-button.svg"
           alt="button3"
@@ -68,7 +61,7 @@ function page() {
           className="w-[8rem] sm:w-[11rem] h-auto"
         />
       </div>
-      <div className="mt-[5%] flex flex-col justify-center items-center bg-[url('/business-plan-regis/mobile-business-plan-competition-panel.svg')] sm:bg-[url('/business-plan-regis/business-plan-competition-panel.svg')] bg-contain bg-center bg-no-repeat w-[90%] max-w-[400px] sm:max-w-[1325px] h-[600px] sm:h-[1000px] relative mx-auto">
+      <div className="z-3 mt-[5%] flex flex-col justify-center items-center bg-[url('/business-plan-regis/mobile-business-plan-competition-panel.svg')] sm:bg-[url('/business-plan-regis/business-plan-competition-panel.svg')] bg-contain bg-center bg-no-repeat w-[90%] max-w-[400px] sm:max-w-[1325px] h-[600px] sm:h-[1000px] relative mx-auto">
         <Image
           src="/business-plan-regis/business-plan-competition-panel-title-text.svg"
           alt="text"
@@ -179,4 +172,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
