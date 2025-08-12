@@ -2,8 +2,57 @@
 
 import Image from "next/image";
 import Link from "next/link";
-
+import { useEffect, useState } from "react";
+import { signInUser, getCurrentUser } from "@/lib/user";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        router.push("/");
+        return;
+      }
+      setCheckingAuth(false);
+    };
+
+    checkAuth();
+  }, [router]);
+
+  const handleLogin = async () => {
+    setError(null);
+    setLoading(true);
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      setLoading(false);
+      return;
+    }
+    const res = await signInUser(email, password);
+    setLoading(false);
+    if (res.success) {
+      router.push("/");
+    } else {
+      setError(res.error || "Login failed.");
+    }
+  };
+
+  // Show loading while checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  
   return (
     <div className="overflow-x-hidden">
       <div className="pt-[10%] overflow-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
@@ -33,6 +82,8 @@ export default function LoginPage() {
               <input
                 type="email"
                 placeholder="Email Address"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -42,9 +93,16 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="text-red-500 text-sm font-space-mono">{error}</div>
+            )}
 
             {/* Remember Me & Forgot Password */}
             <div className="flex justify-between items-center text-sm sm:text-xl">
@@ -67,7 +125,8 @@ export default function LoginPage() {
             <div className="flex justify-center items-center -mt-2">
               <button
                 className="w-[150px] h-[50px] sm:w-[300px] sm:h-[80px] hover:opacity-80 transition-opacity relative z-20 mt-2 sm:mt-4 flex items-center justify-center"
-                onClick={() => (window.location.href = "/")}
+                onClick={handleLogin}
+                disabled={loading}
               >
                 <Image
                   src="/login/loginbutton.svg"

@@ -2,8 +2,92 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { signUpUser, getCurrentUser } from "@/lib/user";
+import { useRouter } from "next/navigation";
+import Popup from "@/components/Popup";
 
 export default function LoginPage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [accept, setAccept] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupTitle, setPopupTitle] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupSuccess, setPopupSuccess] = useState(false);
+  const router = useRouter();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkAuth = async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        router.push("/");
+        return;
+      }
+      setCheckingAuth(false);
+    };
+
+    checkAuth();
+  }, [router]);
+
+  const handleRegister = async () => {
+    setError(null);
+    setSuccess(false);
+    if (!accept) {
+      setPopupTitle("Registration Failed");
+      setPopupMessage("You must accept all terms & conditions.");
+      setPopupSuccess(false);
+      setShowPopup(true);
+      return;
+    }
+    if (!name || !email || !password || !confirm) {
+      setPopupTitle("Registration Failed");
+      setPopupMessage("Please fill in all fields.");
+      setPopupSuccess(false);
+      setShowPopup(true);
+      return;
+    }
+    if (password !== confirm) {
+      setPopupTitle("Registration Failed");
+      setPopupMessage("Passwords do not match.");
+      setPopupSuccess(false);
+      setShowPopup(true);
+      return;
+    }
+    setLoading(true);
+    const res = await signUpUser(email, password, name);
+    setLoading(false);
+    if (res.success) {
+      setSuccess(true);
+      setPopupTitle("Registration Success");
+      setPopupMessage("Your account has been created successfully!");
+      setPopupSuccess(true);
+      setShowPopup(true);
+      // Optionally redirect or clear form
+    } else {
+      setPopupTitle("Registration Failed");
+      setPopupMessage(res.error || "Registration failed.");
+      setPopupSuccess(false);
+      setShowPopup(true);
+    }
+  };
+
+  if (checkingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-hidden">
       <div className="pt-[10%] overflow-x-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
@@ -31,8 +115,10 @@ export default function LoginPage() {
             {/* Name Input */}
             <div className="flex flex-col mt-3 sm:mt-8">
               <input
-                type="name"
+                type="text"
                 placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -42,6 +128,8 @@ export default function LoginPage() {
               <input
                 type="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -51,6 +139,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Create a Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -60,6 +150,8 @@ export default function LoginPage() {
               <input
                 type="password"
                 placeholder="Confirm your Password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -69,17 +161,20 @@ export default function LoginPage() {
               <label className="flex items-center gap-1 sm:gap-2 text-white font-space-mono">
                 <input
                   type="checkbox"
+                  checked={accept}
+                  onChange={(e) => setAccept(e.target.checked)}
                   className="w-3 h-3 sm:w-4 sm:h-4 rounded border-2 border-purple-300"
                 />
                 <span>I accept all terms & conditions</span>
               </label>
             </div>
 
-            {/* Login Button */}
+            {/* Register Button */}
             <div className="flex justify-center items-center -mt-2">
               <button
                 className="w-[150px] h-[50px] sm:w-[300px] sm:h-[80px] hover:opacity-80 transition-opacity relative z-20 mt-2 sm:mt-4 flex items-center justify-center"
-                onClick={() => (window.location.href = "/")}
+                onClick={handleRegister}
+                disabled={loading}
               >
                 <Image
                   src="/register/registerbutton.svg"
@@ -103,6 +198,14 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+      <Popup
+        open={showPopup}
+        title={popupTitle}
+        message={popupMessage}
+        success={popupSuccess}
+        onClose={() => setShowPopup(false)}
+        loading={loading}
+      />
     </div>
   );
 }
