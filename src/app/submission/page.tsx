@@ -41,7 +41,7 @@ const SubmissionPage = () => {
           />
 
           <Image
-            className='absolute bottom-0 left-70 -z-2'
+            className='absolute bottom-8 left-70 -z-2'
             src="/submission/lockOnTarget2.svg"
             alt='Lock On Target Design 2'
             width={300}
@@ -55,6 +55,16 @@ const SubmissionPage = () => {
             width={1000}
             height={300}
           />
+
+          <Image
+            className='absolute bottom-0 left-0 -z-2'
+            src="/submission/city.svg"
+            alt='City'
+            width={600}
+            height={300}
+          />
+
+
 
 
           <div className='flex justify-center items-center min-h-[80vh] w-full'>
