@@ -1,13 +1,12 @@
 'use client'
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { JoinCompetition } from "@/lib/competition";
-import { User } from "@supabase/supabase-js";
-import { GetCurrentUser } from "@/lib/user";
 import Popup from "@/components/Popup";
+import { GetUserByNISN } from "@/lib/user";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -38,26 +37,17 @@ function Page() {
     });
   }, { scope: container });
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const currentUser = await GetCurrentUser();
-      setUser(currentUser);
-    };
-    fetchUser();
-  }, []);
-
   // Add state for each input
-  const [user, setUser] = useState<User | null>(null);
   const [twiboon, setTwiboon] = useState("");
   const [teamName, setTeamName] = useState("");
   const [school, setSchool] = useState("");
   const [contact, setContact] = useState("");
   const [member1Name, setMember1Name] = useState("");
-  const [member1Id, setMember1Id] = useState("");
+  const [member1NISN, setMember1NISN] = useState("");
   const [member2Name, setMember2Name] = useState("");
-  const [member2Id, setMember2Id] = useState("");
+  const [member2NISN, setMember2NISN] = useState("");
   const [member3Name, setMember3Name] = useState("");
-  const [member3Id, setMember3Id] = useState("");
+  const [member3NISN, setMember3NISN] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -68,50 +58,67 @@ function Page() {
   const [popupSuccess, setPopupSuccess] = useState(false);
 
   // TODO: Replace with actual user_id and competition_id from your auth/session logic
-  const user_id = user?.id;
 
   const handleRegister = async () => {
     setLoading(true);
     setMessage(null);
 
+    // Ambil anggota yang valid (nama & NISN harus diisi)
     const members = [
-      { name: member1Name, id: member1Id },
-      { name: member2Name, id: member2Id },
-      { name: member3Name, id: member3Id },
-    ];
+      { name: member1Name, NISN: member1NISN },
+      { name: member2Name, NISN: member2NISN },
+      { name: member3Name, NISN: member3NISN },
+    ].filter(m => m.name.trim() !== "" && m.NISN.trim() !== "");
+
+    if (members.length === 0) {
+      setLoading(false);
+      setPopupTitle("Registrasi Gagal");
+      setPopupMessage("Minimal satu anggota tim harus diisi (nama & NISN).");
+      setPopupSuccess(false);
+      setPopupOpen(true);
+      return;
+    }
 
     let success = true;
-    let errorMsg = "";
+
+    // TODO: Ganti user_id dengan user login yang sebenarnya
+    const user = await GetUserByNISN(member1NISN);
+    const user_id = user?.id;
+
+    if (!user_id) {
+      setLoading(false);
+      setPopupTitle("Registrasi Gagal");
+      setPopupMessage("User ID tidak ditemukan untuk anggota pertama. Pastikan NISN benar.");
+      setPopupSuccess(false);
+      setPopupOpen(true);
+      return;
+    }
 
     for (const member of members) {
-      if (!member.name && !member.id) continue;
       const res = await JoinCompetition({
-        user_id: user_id ?? "",
+        user_id,
         competition_id: "4",
-        student_id: member.id,
+        NISN: member.NISN,
         team_name: teamName,
         link_twiboon: twiboon,
         school_name: school,
         contact_person_number: contact,
       });
-
       if (!res.success) {
         success = false;
-        errorMsg = res.error || "Registration failed.";
         break;
       }
     }
 
     setLoading(false);
 
-    // Tampilkan popup sesuai hasil registrasi
     if (success) {
       setPopupTitle("Registrasi Berhasil");
       setPopupMessage("Tim Anda berhasil didaftarkan!");
       setPopupSuccess(true);
     } else {
       setPopupTitle("Registrasi Gagal");
-      setPopupMessage(errorMsg);
+      setPopupMessage("User sudah terdaftar di lomba lain");
       setPopupSuccess(false);
     }
     setPopupOpen(true);
@@ -209,9 +216,9 @@ function Page() {
               />
               <input
                 type="text"
-                placeholder="Member 1 - Student ID..."
-                value={member1Id}
-                onChange={(e) => setMember1Id(e.target.value)}
+                placeholder="Member 1 - Student NISN..."
+                value={member1NISN}
+                onChange={(e) => setMember1NISN(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
@@ -223,9 +230,9 @@ function Page() {
               />
               <input
                 type="text"
-                placeholder="Member 2 - Student ID..."
-                value={member2Id}
-                onChange={(e) => setMember2Id(e.target.value)}
+                placeholder="Member 2 - Student NISN..."
+                value={member2NISN}
+                onChange={(e) => setMember2NISN(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
@@ -237,9 +244,9 @@ function Page() {
               />
               <input
                 type="text"
-                placeholder="Member 3 - Student ID..."
-                value={member3Id}
-                onChange={(e) => setMember3Id(e.target.value)}
+                placeholder="Member 3 - Student NISN..."
+                value={member3NISN}
+                onChange={(e) => setMember3NISN(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
             </div>

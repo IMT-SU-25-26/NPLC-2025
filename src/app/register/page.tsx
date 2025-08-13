@@ -11,11 +11,9 @@ export default function LoginPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [NISN, setNISN] = useState("");
   const [accept, setAccept] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
 
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
@@ -39,8 +37,6 @@ export default function LoginPage() {
   }, [router]);
 
   const handleRegister = async () => {
-    setError(null);
-    setSuccess(false);
     if (!accept) {
       setPopupTitle("Registration Failed");
       setPopupMessage("You must accept all terms & conditions.");
@@ -55,18 +51,17 @@ export default function LoginPage() {
       setShowPopup(true);
       return;
     }
-    if (password !== confirm) {
+    if (NISN == null) {
       setPopupTitle("Registration Failed");
-      setPopupMessage("Passwords do not match.");
+      setPopupMessage("NISN is required.");
       setPopupSuccess(false);
       setShowPopup(true);
       return;
     }
     setLoading(true);
-    const res = await SignUpUser(email, password, name);
+    const res = await SignUpUser(email, password, name, NISN);
     setLoading(false);
     if (res.success) {
-      setSuccess(true);
       setPopupTitle("Registration Success");
       setPopupMessage("Your account has been created successfully!");
       setPopupSuccess(true);
@@ -148,10 +143,10 @@ export default function LoginPage() {
             {/* confirm Password Input */}
             <div className="flex flex-col">
               <input
-                type="password"
-                placeholder="Confirm your Password"
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
+                type="number"
+                placeholder="Enter Your NISN"
+                value={NISN}
+                onChange={(e) => setNISN(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>

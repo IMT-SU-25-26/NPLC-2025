@@ -14,7 +14,7 @@ export async function GetAllUsersClient(): Promise<Users[]> {
   return users as Users[];
 }
 
-export async function SignUpUser(email: string, password: string, username: string) {
+export async function SignUpUser(email: string, password: string, username: string, NISN: string) {
     const supabase = createClient();
 
     try {
@@ -67,7 +67,8 @@ export async function SignUpUser(email: string, password: string, username: stri
                     uid,
                     email,
                     password,
-                    username
+                    username,
+                    NISN
                 }
             ]);
         }
@@ -152,6 +153,50 @@ export async function GetCurrentUser() {
     return session?.user ?? null;
   } catch (error) {
     console.error("Unexpected error in getCurrentUser:", error);
+    return null;
+  }
+}
+
+export async function GetUserById(userId: string): Promise<Users | null> {
+  const supabase = createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("uid", userId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching user by ID:", error);
+      return null;
+    }
+
+    return data as Users;
+  } catch (error) {
+    console.error("Unexpected error in GetUserById:", error);
+    return null;
+  }
+}
+
+export async function GetUserByNISN(NISN: string): Promise<Users | null> {
+  const supabase = createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("NISN", NISN)
+      .single();
+
+    if (error) {
+      console.error("Error fetching user by NISN:", error);
+      return null;
+    }
+
+    return data as Users;
+  } catch (error) {
+    console.error("Unexpected error in GetUserByNISN:", error);
     return null;
   }
 }
