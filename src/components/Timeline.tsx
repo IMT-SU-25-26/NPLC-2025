@@ -3,36 +3,34 @@ import Image from "next/image";
 export default function EventTimeline() {
   const events = [
     { date: "1 Jan – 2 Jan 2025", label: "Registration Period" },
-    { date: "1 Jan – 2 Jan 2025", label: "Registration Period" },
-    { date: "1 Jan – 2 Jan 2025", label: "Registration Period" },
-    { date: "1 Jan – 2 Jan 2025", label: "Registration Period" },
-    { date: "1 Jan – 2 Jan 2025", label: "Registration Period" },
-    { date: "1 Jan – 2 Jan 2025", label: "Registration Period" },
+    { date: "3 Jan – 4 Jan 2025", label: "Screening" },
+    { date: "5 Jan – 6 Jan 2025", label: "Announcement" },
+    { date: "7 Jan – 8 Jan 2025", label: "Workshop" },
+    { date: "9 Jan – 10 Jan 2025", label: "Final Round" },
+    { date: "11 Jan 2025", label: "Closing" },
   ];
 
   return (
-    <div className="relative flex items-center justify-center">
+    <div className="relative flex items-center justify-center py-10">
       {/* Background */}
       <Image
         src="/home/date-bg.svg"
         alt="Event timeline background"
         draggable={false}
-        width={514}
+        width={600}
         height={1471}
-        className="w-[70vw] h-auto z-0"
+        className="w-full max-w-[900px] h-auto z-0"
       />
 
       {/* Timeline */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="relative w-[60%]">
-          {/* Horizontal Line */}
-          <div className="absolute top-1/2 left-0 w-full h-[8px] bg-gradient-to-r from-[#99E8F0] to-[#FCF5C5] rounded-full transform -translate-y-1/2"></div>
+      <div className="absolute inset-0 flex items-center justify-center px-4">
+        <div className="relative w-full lg:w-[80%]">
+          {/* Horizontal line (shorter) */}
+          <div className="absolute top-1/2 left-[7%] w-[86%] h-[8px] bg-gradient-to-r from-[#99E8F0] to-[#FCF5C5] rounded-full transform -translate-y-1/2"></div>
 
           {/* Event Items */}
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between w-[86%] ml-[7%]">
             {events.map((event, index) => {
-              const isFirst = index === 0;
-              const isLast = index === events.length - 1;
               const isUp = index % 2 === 1; // Alternate up/down
 
               return (
@@ -40,13 +38,11 @@ export default function EventTimeline() {
                   key={index}
                   className="flex flex-col items-center relative"
                 >
-                  {/* Up connector */}
-                  {isUp && !isFirst && !isLast && (
+                  {/* Connector */}
+                  {isUp && (
                     <div className="absolute bottom-full -mb-2 w-[8px] h-10 bg-gradient-to-b from-[#99E8F0] to-[#FCF5C5] rounded-full"></div>
                   )}
-
-                  {/* Down connector */}
-                  {!isUp && !isFirst && !isLast && (
+                  {!isUp && (
                     <div className="absolute top-full -mt-2 w-[8px] h-10 bg-gradient-to-b from-[#99E8F0] to-[#FCF5C5] rounded-full"></div>
                   )}
 
@@ -55,12 +51,16 @@ export default function EventTimeline() {
 
                   {/* Text */}
                   <div
-                    className={`mt-4 text-center text-white ${
-                      isUp ? "absolute -top-28" : "absolute top-16"
+                    className={`text-center text-white font-space-mono whitespace-nowrap ${
+                      isUp
+                        ? "absolute -top-20"
+                        : "absolute top-16"
                     }`}
                   >
-                    <p className="opacity-80 font-space-mono">{event.date}</p>
-                    <p className="text-sm font-ibmplex-mono-bold">{event.label}</p>
+                    <p className="opacity-80 text-xs sm:text-sm">{event.date}</p>
+                    <p className="text-sm font-ibmplex-mono-bold">
+                      {event.label}
+                    </p>
                   </div>
                 </div>
               );
