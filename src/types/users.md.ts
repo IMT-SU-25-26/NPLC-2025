@@ -3,7 +3,3 @@ export interface Users {
   name: string | null;
   email: string | null;
 }
-export interface userCompetition{
-    id: string;
-    competition_id: string;
-}

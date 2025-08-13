@@ -1,9 +1,13 @@
 'use client'
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { JoinCompetition } from "@/lib/competition";
+import { User } from "@supabase/supabase-js";
+import { GetCurrentUser } from "@/lib/user";
+import Popup from "@/components/Popup";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,6 +37,85 @@ function Page() {
       },
     });
   }, { scope: container });
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const currentUser = await GetCurrentUser();
+      setUser(currentUser);
+    };
+    fetchUser();
+  }, []);
+
+  // Add state for each input
+  const [user, setUser] = useState<User | null>(null);
+  const [twiboon, setTwiboon] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [school, setSchool] = useState("");
+  const [contact, setContact] = useState("");
+  const [member1Name, setMember1Name] = useState("");
+  const [member1Id, setMember1Id] = useState("");
+  const [member2Name, setMember2Name] = useState("");
+  const [member2Id, setMember2Id] = useState("");
+  const [member3Name, setMember3Name] = useState("");
+  const [member3Id, setMember3Id] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  // Tambahkan state untuk popup
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupTitle, setPopupTitle] = useState("");
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupSuccess, setPopupSuccess] = useState(false);
+
+  // TODO: Replace with actual user_id and competition_id from your auth/session logic
+  const user_id = user?.id;
+
+  const handleRegister = async () => {
+    setLoading(true);
+    setMessage(null);
+
+    const members = [
+      { name: member1Name, id: member1Id },
+      { name: member2Name, id: member2Id },
+      { name: member3Name, id: member3Id },
+    ];
+
+    let success = true;
+    let errorMsg = "";
+
+    for (const member of members) {
+      if (!member.name && !member.id) continue;
+      const res = await JoinCompetition({
+        user_id: user_id ?? "",
+        competition_id: "4",
+        student_id: member.id,
+        team_name: teamName,
+        link_twiboon: twiboon,
+        school_name: school,
+        contact_person_number: contact,
+      });
+
+      if (!res.success) {
+        success = false;
+        errorMsg = res.error || "Registration failed.";
+        break;
+      }
+    }
+
+    setLoading(false);
+
+    // Tampilkan popup sesuai hasil registrasi
+    if (success) {
+      setPopupTitle("Registrasi Berhasil");
+      setPopupMessage("Tim Anda berhasil didaftarkan!");
+      setPopupSuccess(true);
+    } else {
+      setPopupTitle("Registrasi Gagal");
+      setPopupMessage(errorMsg);
+      setPopupSuccess(false);
+    }
+    setPopupOpen(true);
+  };
 
   return (
     <div ref={container} className="relative pt-[20%] sm:pt-[10%] overflow-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
@@ -76,8 +159,10 @@ function Page() {
             {/* Email Address Input */}
             <div className="flex flex-col mt-3 sm:mt-8">
               <input
-                type="twiboon-link"
+                type="text"
                 placeholder="Twiboon Link"
+                value={twiboon}
+                onChange={(e) => setTwiboon(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -85,32 +170,30 @@ function Page() {
             {/* Password Input */}
             <div className="flex flex-col">
               <input
-                type="team-name"
+                type="text"
                 placeholder="Team Name"
+                value={teamName}
+                onChange={(e) => setTeamName(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
             
             <div className="flex flex-col">
               <input
-                type="school"
+                type="text"
                 placeholder="School / Institution..."
+                value={school}
+                onChange={(e) => setSchool(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
 
             <div className="flex flex-col">
               <input
-                type="contact-person-number"
+                type="text"
                 placeholder="Contact Person Number..."
-                className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <input
-                type="teamname"
-                placeholder="Team Name"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500 relative z-20"
               />
             </div>
@@ -120,44 +203,57 @@ function Page() {
               <input
                 type="text"
                 placeholder="Member 1 - Full Name..."
+                value={member1Name}
+                onChange={(e) => setMember1Name(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
                 type="text"
                 placeholder="Member 1 - Student ID..."
+                value={member1Id}
+                onChange={(e) => setMember1Id(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
                 type="text"
                 placeholder="Member 2 - Full Name..."
+                value={member2Name}
+                onChange={(e) => setMember2Name(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
                 type="text"
                 placeholder="Member 2 - Student ID..."
+                value={member2Id}
+                onChange={(e) => setMember2Id(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
                 type="text"
                 placeholder="Member 3 - Full Name..."
+                value={member3Name}
+                onChange={(e) => setMember3Name(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
               <input
                 type="text"
                 placeholder="Member 3 - Student ID..."
+                value={member3Id}
+                onChange={(e) => setMember3Id(e.target.value)}
                 className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-xl font-space-mono rounded-md border-2 border-purple-300 bg-[#D7FEFF] text-gray-800 placeholder-gray-600 focus:outline-none focus:border-purple-500"
               />
             </div>
             
-            {/* Login Button */}
+            {/* Register Button */}
             <div className="flex justify-center items-center -mt-2">
               <button
                 className="w-[150px] h-[50px] sm:w-[300px] sm:h-[80px] hover:opacity-80 transition-opacity relative z-20 mt-2 sm:mt-4 flex items-center justify-center"
-                onClick={() => (window.location.href = "/")}
+                onClick={handleRegister}
+                disabled={loading}
               >
                 <Image
                   src="/buttons/register-button.svg"
-                  alt="Login Button"
+                  alt="Register Button"
                   draggable={false}
                   width={150}
                   height={50}
@@ -166,8 +262,19 @@ function Page() {
                 />
               </button>
             </div>
+            {message && (
+              <div className="text-center mt-2 text-lg font-space-mono text-purple-700">{message}</div>
+            )}
           </div>
       </div>
+      <Popup
+        open={popupOpen}
+        title={popupTitle}
+        message={popupMessage}
+        success={popupSuccess}
+        loading={loading}
+        onClose={() => setPopupOpen(false)}
+      />
     </div>
   );
 }

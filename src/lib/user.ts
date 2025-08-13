@@ -1,7 +1,7 @@
 import { Users } from "@/types/users.md";
 import { createClient } from "@/utils/supabase/client";
 
-export async function getAllUsersClient(): Promise<Users[]> {
+export async function GetAllUsersClient(): Promise<Users[]> {
   const supabase = createClient();
   const { data: users, error } = await supabase
     .from("users")
@@ -14,7 +14,7 @@ export async function getAllUsersClient(): Promise<Users[]> {
   return users as Users[];
 }
 
-export async function signUpUser(email: string, password: string, username: string) {
+export async function SignUpUser(email: string, password: string, username: string) {
     const supabase = createClient();
 
     try {
@@ -87,7 +87,7 @@ export async function signUpUser(email: string, password: string, username: stri
     }
 }
 
-export async function signInUser(email: string, password: string) {
+export async function SignInUser(email: string, password: string) {
   const supabase = createClient();
   
   try {
@@ -120,7 +120,7 @@ export async function signInUser(email: string, password: string) {
   }
 }
 
-export async function signOutUser() {
+export async function SignOutUser() {
   const supabase = createClient();
   
   try {
@@ -138,7 +138,7 @@ export async function signOutUser() {
   }
 }
 
-export async function getCurrentUser() {
+export async function GetCurrentUser() {
   const supabase = createClient();
   
   try {

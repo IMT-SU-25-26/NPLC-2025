@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { signInUser, getCurrentUser } from "@/lib/user";
+import { SignInUser, GetCurrentUser } from "@/lib/user";
 import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -16,7 +16,7 @@ export default function LoginPage() {
   // Check if user is already logged in
   useEffect(() => {
     const checkAuth = async () => {
-      const user = await getCurrentUser();
+      const user = await GetCurrentUser();
       if (user) {
         router.push("/");
         return;
@@ -35,7 +35,7 @@ export default function LoginPage() {
       setLoading(false);
       return;
     }
-    const res = await signInUser(email, password);
+    const res = await SignInUser(email, password);
     setLoading(false);
     if (res.success) {
       router.push("/");

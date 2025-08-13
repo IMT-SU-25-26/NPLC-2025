@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { signUpUser, getCurrentUser } from "@/lib/user";
+import { SignUpUser, GetCurrentUser } from "@/lib/user";
 import { useRouter } from "next/navigation";
 import Popup from "@/components/Popup";
 
@@ -27,7 +27,7 @@ export default function LoginPage() {
   // Check if user is already logged in
   useEffect(() => {
     const checkAuth = async () => {
-      const user = await getCurrentUser();
+      const user = await GetCurrentUser();
       if (user) {
         router.push("/");
         return;
@@ -63,7 +63,7 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
-    const res = await signUpUser(email, password, name);
+    const res = await SignUpUser(email, password, name);
     setLoading(false);
     if (res.success) {
       setSuccess(true);

@@ -1,4 +1,4 @@
-export interface PopupProps {
+export interface Questions {
     id: string;
     question: JSON;
 }
