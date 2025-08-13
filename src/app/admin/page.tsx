@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CheckWhichCompetitionTheUserJoinned,
@@ -7,7 +7,7 @@ import {
   GetUsersByTeamNameAndCompetitionId,
 } from "@/lib/competition";
 import { Users } from "@/types/users.md";
-import { GetCurrentUser, GetUserById } from "@/lib/user";
+import PageGuard from "@/components/PageGuard";
 
 function Page() {
   const router = useRouter();
@@ -21,32 +21,6 @@ function Page() {
   const [users, setUsers] = useState<Users[] | null>(null);
   const [userError, setUserError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // Overlay state
-  const [checkingAdmin, setCheckingAdmin] = useState(true);
-  const [fadeOut, setFadeOut] = useState(false);
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      const user = await GetCurrentUser();
-
-      if (!user) {
-        router.replace("/");
-        return;
-      }
-
-      const userTable = await GetUserById(user.id);
-      if (!userTable || userTable.isAdmin === false) {
-        router.replace("/");
-        return;
-      }
-
-      // Jika admin, mulai animasi fade
-      setFadeOut(true);
-      setTimeout(() => setCheckingAdmin(false), 0); // 400ms fade duration
-    };
-    checkAdmin();
-  }, [router]);
 
   const handleCheck = async () => {
     setError(null);
@@ -97,108 +71,94 @@ function Page() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen w-screen bg-[url('/backgrounds/main-color-background.svg')]">
-      {/* Overlay */}
-      {checkingAdmin && (
-        <div
-          className={`fixed inset-0 z-50 flex items-center justify-center bg-[url('/backgrounds/main-color-background.svg')] transition-opacity duration-400 ${
-            fadeOut ? "opacity-0 pointer-events-none" : "opacity-100"
-          }`}
-        >
-          <div className="flex flex-col items-center">
-            <div className="w-10 h-10 border-4 border-blue-400 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <span className="text-white text-lg font-medium">
-              Checking admin...
-            </span>
-          </div>
+    <PageGuard checkAdmin>
+      <div className="pt-[5%] flex flex-col justify-center items-center min-h-screen w-screen bg-[url('/backgrounds/main-color-background.svg')]">
+        {/* Panel utama */}
+        <div className="flex flex-col gap-6 bg-white/90 p-8 rounded-2xl shadow-xl w-full max-w-md mt-8 border border-gray-200">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
+            Cek Lomba Berdasarkan NISN
+          </h2>
+          <input
+            type="text"
+            placeholder="Masukkan NISN"
+            value={nisn}
+            onChange={(e) => setNisn(e.target.value)}
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+          />
+          <button
+            onClick={handleCheck}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-700 transition"
+          >
+            Cek Lomba User
+          </button>
+          {competitionId && competitionName && (
+            <div className="text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2 text-center">
+              User terdaftar di lomba: <b>{competitionName}</b> <br />
+              <span className="text-xs text-gray-500">
+                (Competition ID: {competitionId})
+              </span>
+            </div>
+          )}
+          {error && (
+            <div className="text-red-500 bg-red-50 border border-red-200 rounded-lg px-4 py-2 text-center">
+              {error}
+            </div>
+          )}
         </div>
-      )}
 
-      {/* Panel utama */}
-      <div className="flex flex-col gap-6 bg-white/90 p-8 rounded-2xl shadow-xl w-full max-w-md mt-8 border border-gray-200">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
-          Cek Lomba Berdasarkan NISN
-        </h2>
-        <input
-          type="text"
-          placeholder="Masukkan NISN"
-          value={nisn}
-          onChange={(e) => setNisn(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
-        />
-        <button
-          onClick={handleCheck}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-blue-700 transition"
-        >
-          Cek Lomba User
-        </button>
-        {competitionId && competitionName && (
-          <div className="text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2 text-center">
-            User terdaftar di lomba: <b>{competitionName}</b> <br />
-            <span className="text-xs text-gray-500">
-              (Competition ID: {competitionId})
-            </span>
-          </div>
-        )}
-        {error && (
-          <div className="text-red-500 bg-red-50 border border-red-200 rounded-lg px-4 py-2 text-center">
-            {error}
-          </div>
-        )}
+        <div className="flex flex-col gap-6 bg-white/90 p-8 rounded-2xl shadow-xl w-full max-w-md mt-8 border border-gray-200">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
+            Cari Anggota Tim
+          </h2>
+          <input
+            type="text"
+            placeholder="Team Name"
+            value={teamName}
+            onChange={(e) => setTeamName(e.target.value)}
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+          />
+          <input
+            type="text"
+            placeholder="Competition ID"
+            value={teamCompetitionId}
+            onChange={(e) => setTeamCompetitionId(e.target.value)}
+            className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+          />
+          <button
+            onClick={handleGetUsers}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-green-700 transition"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : "Dapatkan Users"}
+          </button>
+          {users && (
+            <div className="text-gray-800 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2">
+              <b>Users:</b>
+              <ul className="list-disc ml-6 mt-2">
+                {users.map((user, idx) => (
+                  <li key={idx} className="text-sm break-all mb-2">
+                    <div>
+                      <b>Nama:</b> {user.name || "-"}
+                    </div>
+                    <div>
+                      <b>Email:</b> {user.email || "-"}
+                    </div>
+                    <div>
+                      <b>NISN:</b> {user.NISN || "-"}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {userError && (
+            <div className="text-red-500 bg-red-50 border border-red-200 rounded-lg px-4 py-2 text-center">
+              {userError}
+            </div>
+          )}
+        </div>
       </div>
-
-      <div className="flex flex-col gap-6 bg-white/90 p-8 rounded-2xl shadow-xl w-full max-w-md mt-8 border border-gray-200">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-2 text-center">
-          Cari Anggota Tim
-        </h2>
-        <input
-          type="text"
-          placeholder="Team Name"
-          value={teamName}
-          onChange={(e) => setTeamName(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
-        />
-        <input
-          type="text"
-          placeholder="Competition ID"
-          value={teamCompetitionId}
-          onChange={(e) => setTeamCompetitionId(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
-        />
-        <button
-          onClick={handleGetUsers}
-          className="bg-green-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-green-700 transition"
-          disabled={loading}
-        >
-          {loading ? "Loading..." : "Dapatkan Users"}
-        </button>
-        {users && (
-          <div className="text-gray-800 bg-gray-50 border border-gray-200 rounded-lg px-4 py-2">
-            <b>Users:</b>
-            <ul className="list-disc ml-6 mt-2">
-              {users.map((user, idx) => (
-                <li key={idx} className="text-sm break-all mb-2">
-                  <div>
-                    <b>Nama:</b> {user.name || "-"}
-                  </div>
-                  <div>
-                    <b>Email:</b> {user.email || "-"}
-                  </div>
-                  <div>
-                    <b>NISN:</b> {user.user_NISN || "-"}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {userError && (
-          <div className="text-red-500 bg-red-50 border border-red-200 rounded-lg px-4 py-2 text-center">
-            {userError}
-          </div>
-        )}
-      </div>
-    </div>
+    </PageGuard>
   );
 }
 

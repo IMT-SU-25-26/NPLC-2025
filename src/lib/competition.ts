@@ -85,7 +85,7 @@ export async function CheckWhichCompetitionTheUserJoinned({NISN}: CheckUserCompe
     .from("users_competitions")
     .select("competition_id")
     .eq("NISN", NISN)
-    .maybeSingle();
+    .single();
 
   if (checkError) {
     console.error("Error checking existing competition:", checkError);
