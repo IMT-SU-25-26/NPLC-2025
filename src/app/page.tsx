@@ -18,18 +18,13 @@ export default function Home() {
           width={500}
           height={300}
           priority
-          className="mt-[5%] z-20 max-w-[80%] h-auto sm:mb-10 md:mb-60 lg:mb-0"
+          className="mt-[5%] z-20 max-w-[80%] h-auto"
         />
         {/* Timeline */}
-        <div className="mb-60 lg:mb-0 mt-40 md:mt-0 w-full flex justify-center items-center">
-          <Timeline />
-        </div>
+        <Timeline />
         
         {/* Buttons */}
-
-        <div className="flex flex-col items-center gap-4 z-20 mt-45 md:mt-0">
-          <HomepageTabButton/>
-        </div>
+        <HomepageTabButton/>
         
         <div className="pb-[5%]"></div>
       </main>
