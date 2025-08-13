@@ -3,7 +3,7 @@ import PageGuard from "@/components/PageGuard";
 import Link from "next/link";
 function page() {
   return (
-    <PageGuard competitionId="1">
+    <PageGuard competitionId="1" redirectIfRegistered={true}>
     <div className="flex min-h-screen w-screen pt-[10%] flex-col justify-center items-center">
       <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-center">
         {Array.from({ length: 8 }, (_, i) => (

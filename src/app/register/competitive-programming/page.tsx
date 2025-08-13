@@ -98,7 +98,7 @@ function Page() {
     for (const member of members) {
       const res = await JoinCompetition({
         user_id,
-        competition_id: "4",
+        competition_id: "1",
         NISN: member.NISN,
         team_name: teamName,
         link_twiboon: twiboon,
