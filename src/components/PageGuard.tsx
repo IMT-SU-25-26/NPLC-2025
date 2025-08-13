@@ -3,7 +3,6 @@ import { CheckWhichCompetitionTheUserJoinned } from "@/lib/competition";
 import { GetCurrentUser, GetUserById } from "@/lib/user";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { PageGuardProps } from "@/types/pageGuard.md";
 
 export default function PageGuard({

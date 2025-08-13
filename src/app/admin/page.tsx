@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   CheckWhichCompetitionTheUserJoinned,
   GetCompetitionNameById,
@@ -10,7 +9,6 @@ import { Users } from "@/types/users.md";
 import PageGuard from "@/components/PageGuard";
 
 function Page() {
-  const router = useRouter();
   const [nisn, setNisn] = useState("");
   const [competitionId, setCompetitionId] = useState<string | null>(null);
   const [competitionName, setCompetitionName] = useState<string | null>(null);

@@ -85,9 +85,9 @@ export async function CheckWhichCompetitionTheUserJoinned({NISN}: CheckUserCompe
     .from("users_competitions")
     .select("competition_id")
     .eq("NISN", NISN)
-    .single();
+    .maybeSingle();
 
-  if (checkError) {
+  if (checkError && checkError.code !== "PGRST116") { // ignore "No rows found" error
     console.error("Error checking existing competition:", checkError);
     return { success: "0", error: checkError.message };
   }
