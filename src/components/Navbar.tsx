@@ -6,8 +6,6 @@ import { createClient } from "@/utils/supabase/client";
 import { User } from "@supabase/supabase-js";
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,8 +20,6 @@ export default function Navbar() {
       } catch (error) {
         console.error("Auth error:", error);
         setUser(null);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -33,7 +29,6 @@ export default function Navbar() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
@@ -45,7 +40,6 @@ export default function Navbar() {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setShowDropdown(false);
       }
     };
 
@@ -59,14 +53,13 @@ export default function Navbar() {
     const supabase = createClient();
     await supabase.auth.signOut();
     setUser(null);
-    setShowDropdown(false);
   };
 
   return (
     <nav className="fixed z-[50] h-[10vh] w-screen flex justify-center items-center">
       <Link href="/" className="hover:cursor-pointer">
         <Image
-          src={"/buttons/home.svg"}
+          src={"/buttons/Home.svg"}
           alt="home"
           width={150}
           height={150}
