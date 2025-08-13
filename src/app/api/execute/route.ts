@@ -61,7 +61,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Unsupported language" }, { status: 400 });
         }
 
-        let sourceCode = code;
+        const sourceCode = code;
 
         // submit the code for execution
         const token = await submitCode(sourceCode, languageId);

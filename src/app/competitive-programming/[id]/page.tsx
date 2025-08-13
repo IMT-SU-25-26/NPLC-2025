@@ -15,7 +15,7 @@ const STARTER_CODE = {
 }`
 }
 
-export default function Page(props: { params: Promise<{ id: string }> }) {
+export default function Page() {
   
 
   const [code, setCode] = React.useState<string>("");
@@ -62,7 +62,7 @@ export default function Page(props: { params: Promise<{ id: string }> }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 py-8 px-4">
       <div className="w-full max-w-3xl bg-gray-800 rounded-xl shadow-lg p-8 space-y-6">
-      <h1 className="text-3xl font-bold text-center text-white mb-4">Competitive Programming</h1>
+      <h1 className="text-3xl font-bold text-center text-white mb-4">Competitive Programming (params.id)</h1>
       <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-4 md:space-y-0">
         <LanguageSelector language={language} setLanguage={setLanguage} />
         <button
