@@ -2,12 +2,16 @@ import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
 import Button from "@/components/Button";
+import CityBackground from "@/components/CityBG";
 
 export default function Home() {
   return (
     <>
       <div className="mt-[8vh]"></div>
       <main className="min-h-screen relative overflow-hidden flex flex-col items-center">
+        {/* Background Image */}
+        <CityBackground />
+
         {/* Logo */}
         <Image
           src="/home/logo-nplc.webp"
