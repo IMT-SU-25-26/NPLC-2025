@@ -59,7 +59,7 @@ export default function Navbar() {
     <nav className="fixed z-[50] h-[10vh] w-screen flex justify-center items-center">
       <Link href="/" className="hover:cursor-pointer">
         <Image
-          src={"/buttons/home.svg"}
+          src={"/buttons/Home.svg"}
           alt="home"
           width={150}
           height={150}

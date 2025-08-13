@@ -97,7 +97,7 @@ export default function LoginPage() {
         />
         <div className="flex flex-col justify-center items-center bg-[url('/register/registercardmobile.svg')] sm:bg-[url('/register/registercard.svg')] bg-contain bg-center bg-no-repeat w-[90%] max-w-[400px] sm:max-w-[700px] h-[600px] sm:h-[800px] mt-4 sm:mt-7 p-6 sm:px-8 sm:py-12 relative mx-auto">
           <Image
-            src="/register/register.svg"
+            src="/register/Register.svg"
             alt="Login Card"
             draggable={false}
             width={400}
