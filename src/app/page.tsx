@@ -1,7 +1,7 @@
 import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
-import Button from "@/components/HomepageTabButton";
+import HomepageTabButton from "@/components/HomepageTabButton";
 
 export default function Home() {
   return (
@@ -18,12 +18,19 @@ export default function Home() {
           width={500}
           height={300}
           priority
-          className="mt-[5%] z-20 max-w-[80%] h-auto"
+          className="mt-[5%] z-20 max-w-[80%] h-auto sm:mb-10 md:mb-60 lg:mb-0"
         />
         {/* Timeline */}
-        <Timeline />
+        <div className="mb-60 lg:mb-0 mt-40 md:mt-0 w-full flex justify-center items-center">
+          <Timeline />
+        </div>
+        
         {/* Buttons */}
-        <Button />
+
+        <div className="flex flex-col items-center gap-4 z-20 mt-45 md:mt-0">
+          <HomepageTabButton/>
+        </div>
+        
         <div className="pb-[5%]"></div>
       </main>
     </>
