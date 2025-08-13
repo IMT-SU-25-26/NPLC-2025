@@ -44,7 +44,7 @@ export default function PageGuard({
         }
         const res = await CheckWhichCompetitionTheUserJoinned({ NISN: userTable.NISN.toString() });
         if (redirectIfRegistered && res.success && res.success !== "0") {
-          setErrorMsg("You have already registered for this competition.");
+          setErrorMsg("You have already registered for a competition!");
           setChecking(false);
           return;
         }
