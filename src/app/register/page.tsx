@@ -2,12 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SignUpUser, GetCurrentUser } from "@/lib/user";
 import { useRouter } from "next/navigation";
 import Popup from "@/components/Popup";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,6 +25,7 @@ export default function LoginPage() {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupSuccess, setPopupSuccess] = useState(false);
   const router = useRouter();
+  const container = useRef<HTMLDivElement>(null);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -75,6 +80,48 @@ export default function LoginPage() {
     }
   };
 
+  useGSAP(
+    () => {
+      gsap.killTweensOf([".city-front", ".city-back"]);
+      if (typeof window !== "undefined" && window.innerWidth > 1024) {
+        gsap.to(".city-front", {
+          y: -150,
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        });
+        gsap.to(".city-back", {
+          y: -100,
+          scrollTrigger: {
+            trigger: container.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        });
+      } else {
+        gsap.to(".city-front", {
+          y: -35,
+          duration: 2.5,
+          yoyo: true,
+          repeat: -1,
+          ease: "power1.inOut",
+        });
+        gsap.to(".city-back", {
+          y: -20,
+          duration: 2.5,
+          yoyo: true,
+          repeat: -1,
+          ease: "power1.inOut",
+        });
+      }
+    },
+    { scope: container }
+  );
+
   if (checkingAuth) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -84,8 +131,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="overflow-x-hidden">
-      <div className="pt-[10%] overflow-x-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-screen max-w-screen">
+    <div className="overflow-hidden">
+      <div className="pt-[10%] overflow-hidden bg-[url('/backgrounds/main-color-background.svg')] flex flex-col items-center min-h-screen w-full max-w-full">
         <Image
           src="/home/logo-nplc.webp"
           alt="NPLC 13th Logo"
@@ -191,6 +238,25 @@ export default function LoginPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </div>
+      {/* City SVG Backgrounds - Relative di bawah konten */}
+      <div className="relative left-0 bottom-0 w-full pointer-events-none z-[0]">
+        <div className="relative w-full h-[10px] sm:h-[10px]">
+          <Image
+            src="/business-plan-regis/city-depan.svg"
+            width={100}
+            height={50}
+            className="city-front absolute bottom-[-3rem] sm:bottom-[-3rem] lg:bottom-[-5rem] w-full h-auto right-0 will-change-transform"
+            alt="city background 2"
+          />
+          <Image
+            src="/business-plan-regis/city-back.svg"
+            width={100}
+            height={100}
+            className="city-back absolute bottom-[-3rem] sm:bottom-[-3rem] lg:bottom-[-5rem] w-[60%] h-auto right-0 will-change-transform"
+            alt="city background 3"
+          />
         </div>
       </div>
       <Popup
