@@ -10,7 +10,7 @@ const SubmissionPage = () => {
           {/* decor image bg */}
           <Image
             className='absolute -top-15 left-50 -z-2'
-            src="/submission/dot-design.svg"
+            src="/submission/dot-design.webp"
             alt='Decorative Dot Design Background'
             width={500}
             height={500}
@@ -18,7 +18,7 @@ const SubmissionPage = () => {
           
           <Image
             className='absolute -bottom-0 right-50 -z-2'
-            src="/submission/nodes-design.svg"
+            src="/submission/nodes-design.webp"
             alt='Nodes Design Background'
             width={450}
             height={500}
@@ -26,7 +26,7 @@ const SubmissionPage = () => {
 
           <Image
             className='absolute top-35 right-0 -z-2'
-            src="/submission/lockOnTarget.svg"
+            src="/submission/lockOnTarget.webp"
             alt='Lock On Target Design'
             width={150}
             height={150}
@@ -34,7 +34,7 @@ const SubmissionPage = () => {
 
           <Image
             className='absolute bottom-20 left-0 -z-2'
-            src="/submission/hexagon-design.svg"
+            src="/submission/hexagon-design.webp"
             alt='Hexagon Design'
             width={200}
             height={200}
@@ -42,7 +42,7 @@ const SubmissionPage = () => {
 
           <Image
             className='absolute bottom-8 left-70 -z-2'
-            src="/submission/lockOnTarget2.svg"
+            src="/submission/lockOnTarget2.webp"
             alt='Lock On Target Design 2'
             width={300}
             height={300}
@@ -50,7 +50,7 @@ const SubmissionPage = () => {
 
           <Image
             className='absolute bottom-0 right-0 -z-2'
-            src="/submission/bottom-design.svg"
+            src="/submission/bottom-design.webp"
             alt='Bottom Design'
             width={1000}
             height={300}
@@ -58,7 +58,7 @@ const SubmissionPage = () => {
 
           <Image
             className='absolute bottom-0 left-0 -z-2'
-            src="/submission/city.svg"
+            src="/submission/city.webp"
             alt='City'
             width={600}
             height={300}
@@ -69,19 +69,10 @@ const SubmissionPage = () => {
 
             <div className='flex justify-center items-center min-h-[80vh] w-full'>
             <div className='relative m-auto flex flex-col w-[22rem] sm:w-[60vw] md:w-[50rem] h-[28rem] items-start px-15 md:px-28 pt-15'>
-              {/* <Image
-                src="/submission/background-card-submission.svg"
-                alt="Submission Page"
-                width={300}
-                height={200}
-                className="absolute -z-1 top-0 left-0 right-0 bottom-0 w-full h-auto"
-                draggable={false}
-                sizes="(max-width: 639px) 100vw, 50rem"
-              /> */}
 
               {/* Desktop/Laptop Image */}
               <Image
-                src="/submission/background-card-submission.svg"
+                src="/submission/background-card-submission.webp"
                 alt="Submission Page"
                 width={300}
                 height={200}
@@ -91,7 +82,7 @@ const SubmissionPage = () => {
 
               {/* Mobile Image */}
               <Image
-                src="/submission/background-card-mobile.svg"
+                src="/submission/background-card-mobile.webp"
                 alt="Submission Page Mobile"
                 width={300}
                 height={200}
@@ -108,6 +99,7 @@ const SubmissionPage = () => {
                   alt="Code Logo"
                   width={120}
                   height={200}
+                  draggable={false}
                 />
                 <div className='flex w-full justify-end items-center gap-1 md:gap-3'>
                   <Button type={1} width='170px'  isDisabled={true}>Remove</Button>
