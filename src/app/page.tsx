@@ -1,12 +1,17 @@
 import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
+import Button from "@/components/Button";
+import CityBackground from "@/components/CityBG";
 
 export default function Home() {
   return (
     <>
       <div className="mt-[8vh]"></div>
       <main className="min-h-screen relative overflow-hidden flex flex-col items-center">
+        {/* Background Image */}
+        <CityBackground />
+
         {/* Logo */}
         <Image
           src="/home/logo-nplc.webp"
@@ -18,8 +23,15 @@ export default function Home() {
           className="mt-24 z-20 max-w-[80%] h-auto"
         />
 
+        <div className="mt-10"></div>
+
         {/* Timeline */}
         <Timeline />
+
+        {/* Buttons */}
+        <Button />
+
+        {/* Layer */}
       </main>
     </>
   );
