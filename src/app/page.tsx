@@ -1,7 +1,7 @@
 import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
-import Button from "@/components/HomepageTabButton";
+import HomepageTabButton from "@/components/HomepageTabButton";
 
 export default function Home() {
   return (
@@ -22,8 +22,10 @@ export default function Home() {
         />
         {/* Timeline */}
         <Timeline />
+        
         {/* Buttons */}
-        <Button />
+        <HomepageTabButton/>
+        
         <div className="pb-[5%]"></div>
       </main>
     </>

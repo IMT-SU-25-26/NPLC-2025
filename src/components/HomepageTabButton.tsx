@@ -3,7 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 type ButtonData = {
-  id: "programming" | "type-racer" | "business-plan" | "prompting";
+  id: "competitive-programming" | "type-racer" | "business-plan" | "prompt-gpt";
   title: string;
   desc: string;
   rules: string;
@@ -12,9 +12,9 @@ type ButtonData = {
 export default function CompetitionSection() {
   const buttons: ButtonData[] = [
     {
-      id: "programming",
+      id: "competitive-programming",
       title: "Programming",
-      desc: "Lorem ipsum test test test test test test test test test test test test test test",
+      desc: "Lorem ipsum test test test test test test test test test test test test",
       rules: "Ketentuan , dll here",
     },
     {
@@ -30,14 +30,14 @@ export default function CompetitionSection() {
       rules: "Ketentuan business plan...",
     },
     {
-      id: "prompting",
+      id: "prompt-gpt",
       title: "Prompting",
       desc: "Lorem ipsum test test test test test test test test test test test test",
       rules: "Ketentuan prompting...",
     },
   ];
 
-  const [selected, setSelected] = useState<ButtonData["id"]>("programming");
+  const [selected, setSelected] = useState<ButtonData["id"]>("competitive-programming");
 
   const getButtonImage = (id: ButtonData["id"]) =>
     `/buttons/${
@@ -49,11 +49,12 @@ export default function CompetitionSection() {
   const getUnselectedImage = (id: string) => {
     if (id === "business-plan")
       return `/buttons/unselected-business-plan-button.svg`;
-    return `/buttons/unselected-${id}-button.svg`;
+      return `/buttons/unselected-${id}-button.svg`;
   };
 
   return (
-    <div className="relative z-[3] flex flex-col items-center gap-10">
+    <>
+    <div className="relative hidden sm:flex z-[3] flex-col items-center gap-10">
       {/* Buttons */}
       <div className="flex gap-6">
         {buttons.map((btn) => (
@@ -101,9 +102,74 @@ export default function CompetitionSection() {
             {/* <small className="text-gray-300">
             {buttons.find(b => b.id === selected)?.rules}
             </small> */}
+            <a href={`/register/${(selected)}`}>
+          <Image
+            src="/buttons/Register-Competition-Button.svg"
+            alt="Register button"
+            width={120}
+            height={40}
+            draggable={false}
+            className="object-contain mt-4 w-45"
+          />
+          </a>
           </div>
         </div>
       </div>
     </div>
+    
+{/* Mobile view */}
+<div className="flex flex-col gap-6 sm:hidden px-4">
+  {buttons.map((btn) => (
+    <div
+      key={btn.id}
+      className="relative w-full p-6 min-h-[140px] mb-6" // p-6 biar ada jarak & min height supaya icon + text muat
+    >
+      {/* Background card */}
+      <div className="absolute inset-0 scale-110"> 
+        <Image
+          src="/buttons/Card.svg"
+          alt="Card background"
+          fill
+          className="object-contain"
+        />
+      </div>
+
+      {/* Card content */}
+      <div className="pl-20 relative z-10 flex items-start gap-4">
+        <Image
+          src={getUnselectedImage(btn.id)}
+          alt={`${btn.title} icon`}
+          width={100}
+          height={100}
+          draggable={false}
+        />
+        <div className="flex flex-col w-[calc(100%-200px)] break-words">
+          <h2 className="text-[#FCF552] font-rubik-glitch text-xl mb-1">
+            {btn.title}
+          </h2>
+          <p className="text-white font-space-mono text-sm break-words">
+            {btn.desc}
+          </p>
+          <small className="text-gray-300 text-xs break-words">
+            {btn.rules}
+          </small>
+          <a href={`/register/${btn.id}`}>
+          <Image
+            src="/buttons/Register-Competition-Button.svg"
+            alt="Register button"
+            width={120}
+            height={40}
+            draggable={false}
+            className="object-contain mt-4"
+          />
+          </a>
+        </div>
+
+      </div>
+    </div>
+  ))}
+</div>
+
+</>
   );
 }
