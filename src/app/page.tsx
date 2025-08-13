@@ -2,7 +2,6 @@ import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
 import Button from "@/components/Button";
-import CityBackground from "@/components/CityBG";
 
 export default function Home() {
   return (
