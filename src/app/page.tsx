@@ -6,8 +6,7 @@ import Button from "@/components/HomepageTabButton";
 export default function Home() {
   return (
     <>
-      <div className="mt-[8vh]"></div>
-      <main className="min-h-screen relative overflow-hidden flex flex-col gap-10 items-center">
+      <main className="pt-[8vh] min-h-screen bg-[url('/backgrounds/main-color-background.svg')] bg-cover bg-center bg-no-repeat relative overflow-hidden flex flex-col gap-10 items-center">
         {/* Background Image */}
         <Image src={"/business-plan-regis/city-depan.svg"} width={100} height={50} className="city-front absolute bottom-[-5%] w-full h-auto right-0 z-1 will-change-transform" alt="city background 1"/>
         <Image src={"/business-plan-regis/city-back.svg"} width={100} height={100} className="city-back absolute bottom-0 w-[60%] h-auto right-0 z-0 will-change-transform" alt="city background 1"/>

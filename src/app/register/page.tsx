@@ -13,7 +13,7 @@ import PopUp from "@/components/Popup";
 gsap.registerPlugin(ScrollTrigger);
 
 // Komponen AnimatedContent seperti di business plan
-function AnimatedContent({ container }: { container: React.RefObject<HTMLDivElement> }) {
+function AnimatedContent({ container }: { container: React.RefObject<HTMLDivElement | null> }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

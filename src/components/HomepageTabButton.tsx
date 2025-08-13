@@ -52,8 +52,6 @@ export default function CompetitionSection() {
     return `/buttons/unselected-${id}-button.svg`;
   };
 
-  const selectedButton = buttons.find((b) => b.id === selected)!;
-
   return (
     <div className="relative z-[3] flex flex-col items-center gap-10">
       {/* Buttons */}

@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 function AnimatedContent({
   container,
 }: {
-  container: React.RefObject<HTMLDivElement>;
+  container: React.RefObject<HTMLDivElement | null>;
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -12,7 +12,7 @@ import PageGuard from "@/components/PageGuard";
 gsap.registerPlugin(ScrollTrigger);
 
 function AnimatedContent(props: {
-  container: React.RefObject<HTMLDivElement>;
+  container: React.RefObject<HTMLDivElement | null>;
   twiboon: string;
   setTwiboon: (v: string) => void;
   teamName: string;
