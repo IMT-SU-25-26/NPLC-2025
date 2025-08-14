@@ -311,7 +311,7 @@ function Page() {
   };
 
   return (
-    <PageGuard redirectIfRegistered competitionId="4">
+    <PageGuard redirectIfRegistered shouldRedirectOnClose={true} competitionId="4">
       <AnimatedContent
         container={container}
         twiboon={twiboon}
