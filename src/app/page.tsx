@@ -1,3 +1,4 @@
+// 13th NPLC 2025
 import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
