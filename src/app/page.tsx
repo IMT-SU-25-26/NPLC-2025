@@ -1,40 +1,4 @@
 // 13th NPLC 2025
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
-// Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-// Provident voluptatibus aliquam officiis nostrum ex veniam exercitationem itaque architecto dolorum sapiente inventore incidunt nihil voluptatum, 
-// ipsa consectetur velit. Exercitationem, nesciunt repudiandae!
 import Image from "next/image";
 import "@/styles/home.css"; // keep your CSS for global background if needed
 import Timeline from "@/components/Timeline";
