@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.55.0",
     "gsap": "^3.13.0",
+    "helpers-nextjs": "link:@supabase/auth/helpers-nextjs",
     "next": "15.4.6",
     "react": "19.1.1",
     "react-dom": "19.1.1"

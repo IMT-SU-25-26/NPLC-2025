@@ -1,8 +1,8 @@
 import { Users } from "@/types/users.md";
 import { createClient } from "@/utils/supabase/client";
-
+import { createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 export async function GetAllUsersClient(): Promise<Users[]> {
-  const supabase = createClient();
+  const supabase = createClientComponentClient();
   const { data: users, error } = await supabase
     .from("users")
     .select("*")
@@ -15,7 +15,7 @@ export async function GetAllUsersClient(): Promise<Users[]> {
 }
 
 export async function SignUpUser(email: string, password: string, username: string, NISN: string) {
-    const supabase = createClient();
+    const supabase = createClientComponentClient();
 
     try {
         const { data: existingUsers, error: fetchError } = await supabase
@@ -45,7 +45,7 @@ export async function SignUpUser(email: string, password: string, username: stri
             email,
             password,
             options: {
-              emailRedirectTo: 'https://nplc.vercel.app/',
+              emailRedirectTo: 'https://nplc.vercel.app/auth/calback',
               data: {
                   username: username
               }
