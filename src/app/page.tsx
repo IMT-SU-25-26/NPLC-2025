@@ -23,7 +23,10 @@ export default function Home() {
           className="mt-[5%] z-20 max-w-[80%] h-auto"
         />
         {/* Timeline */}
-        <Timeline />
+        <div>
+          <Timeline />
+        </div>
+        
         
         {/* Buttons */}
         <HomepageTabButton/>
