@@ -210,7 +210,7 @@ function AnimatedContent({ container }: { container: React.RefObject<HTMLDivElem
                 <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <Image
-                  src="/buttons/registerbutton.svg"
+                  src="/buttons/register-button.svg"
                   alt="Register Button"
                   draggable={false}
                   width={150}
