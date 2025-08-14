@@ -45,10 +45,10 @@ export async function SignUpUser(email: string, password: string, username: stri
             email,
             password,
             options: {
-                data: {
-                    username: username,
-                    emailRedirectTo: 'https://nplc.vercel.app/',
-                }
+              emailRedirectTo: 'https://nplc.vercel.app/',
+              data: {
+                  username: username
+              }
             }
         });
 
