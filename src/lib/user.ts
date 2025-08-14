@@ -18,26 +18,26 @@ export async function SignUpUser(email: string, password: string, username: stri
     const supabase = createClientComponentClient();
 
     try {
-        const { data: existingUsers, error: fetchError } = await supabase
+        const { data: existingUser, error: fetchError } = await supabase
             .from("users")
             .select("id")
-            .eq("email", email)
-            .single();
+            .or(`email.eq.${email},NISN.eq.${NISN}`)
+            .maybeSingle();
 
         if (fetchError && fetchError.code !== "PGRST116") {
             console.error("Error checking existing user:", fetchError);
             return {
-                success: false,
-                user: null,
-                error: "Error checking existing user"
+          success: false,
+          user: null,
+          error: "Error checking existing user"
             };
         }
 
-        if (existingUsers) {
+        if (existingUser) {
             return {
-                success: false,
-                user: null,
-                error: "User with this email already exists"
+          success: false,
+          user: null,
+          error: "User with this email or NISN already exists"
             };
         }
 

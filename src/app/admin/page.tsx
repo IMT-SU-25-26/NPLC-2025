@@ -69,7 +69,7 @@ function Page() {
   };
 
   return (
-    <PageGuard checkAdmin>
+    <PageGuard checkAdmin redirectTo="/" shouldRedirectOnClose={true}>
       <div className="pt-[5%] flex flex-col justify-center items-center min-h-screen w-screen bg-[url('/backgrounds/main-color-background.svg')]">
         {/* Panel utama */}
         <div className="flex flex-col gap-6 bg-white/90 p-8 rounded-2xl shadow-xl w-full max-w-md mt-8 border border-gray-200">

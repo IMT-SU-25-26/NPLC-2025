@@ -7,17 +7,23 @@ const LANGUAGE_IDS = {
     java: 62, // Java
 };
 
-const JUDGE0_API = process.env.JUDGE0_API_URL || "https://judge0-ce.p.rapidapi.com";
-const RAPID_API_KEY = process.env.RAPID_API_KEY;
-const RAPID_API_HOST = process.env.RAPID_API_HOST;
+// const JUDGE0_API = process.env.JUDGE0_API_URL || "https://judge0-ce.p.rapidapi.com";
+// const RAPID_API_KEY = process.env.RAPID_API_KEY;
+// const RAPID_API_HOST = process.env.RAPID_API_HOST;
+
+const JUDGE0_API = process.env.JUDGE0_API_URL || "http://localhost:8080";
+
+if (!JUDGE0_API) {
+  throw new Error("JUDGE0_API_URL is not set in environment variables");
+}
 
 async function submitCode(sourceCode: string, languageId: number){
     const response = await fetch(`${JUDGE0_API}/submissions`, {
         method: "POST",
         headers: {
             "content-type": "application/json",
-            "X-RapidAPI-Key": RAPID_API_KEY!,
-            "X-RapidAPI-Host": RAPID_API_HOST!
+            // "X-RapidAPI-Key": RAPID_API_KEY!,
+            // "X-RapidAPI-Host": RAPID_API_HOST!
         },
         body: JSON.stringify({
             source_code: sourceCode,
@@ -39,8 +45,8 @@ async function getResult(token: string){
         method: "GET",
         headers: {
             "content-type": "application/json",
-            "X-RapidAPI-Key": RAPID_API_KEY!,
-            "X-RapidAPI-Host": RAPID_API_HOST!
+            // "X-RapidAPI-Key": RAPID_API_KEY!,
+            // "X-RapidAPI-Host": RAPID_API_HOST!
         }
     });
     if (!response.ok) {
@@ -116,3 +122,5 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: error instanceof Error ? error.message : String(error) }, { status: 500 });
     }
 }
+
+console.log("Submitting to Judge0:", `${JUDGE0_API}/submissions`);
