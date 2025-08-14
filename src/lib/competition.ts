@@ -2,31 +2,31 @@ import { Users } from "@/types/users.md";
 import { createClient } from "@/utils/supabase/client";
 import type { JoinCompetition, CheckUserCompetition } from "@/types/competitions.md";
 
-export async function GetAllUsers(): Promise<Users[]> {
-  const supabase = createClient();
-  const { data: user_ids, error } = await supabase
-    .from("users_competitions")
-    .select("user_id")
-    .order("id", { ascending: true });
-  if (error) {
-    console.error("Error fetching users:", error);
-    return [];
-  }
+// export async function GetAllUsers(): Promise<Users[]> {
+//   const supabase = createClient();
+//   const { data: user_ids, error } = await supabase
+//     .from("users")
+//     .select("id")
+//     .eq("competition_id", )
+//     .order("id", { ascending: true });
+//   if (error) {
+//     console.error("Error fetching users:", error);
+//     return [];
+//   }
 
-  const { data: users, error: usersError } = await supabase
-    .from("users")
-    .select("*")
-    .in("id", user_ids);
-  if (usersError) {
-    console.error("Error fetching users:", usersError);
-    return [];
-  }
+//   const { data: users, error: usersError } = await supabase
+//     .from("users")
+//     .select("*")
+//     .in("id", user_ids);
+//   if (usersError) {
+//     console.error("Error fetching users:", usersError);
+//     return [];
+//   }
 
-  return users as Users[];
-}
+//   return users as Users[];
+// }
 
 export async function JoinCompetition({
-  user_id,
   competition_id,
   NISN,
   team_name,
@@ -37,18 +37,17 @@ export async function JoinCompetition({
   const supabase = createClient();
 
   const { error } = await supabase
-    .from("users_competitions")
-    .insert([
-      {
-        user_id,
-        competition_id,
-        NISN,
-        team_name,
-        link_twiboon,
-        school_name,
-        contact_person_number,
-      },
-    ]);
+    .from("users")
+    .update({
+      competition_id: competition_id,
+      NISN : NISN,
+      team_name : team_name,
+      link_twiboon : link_twiboon,
+      school_name : school_name,
+      contact_person_number : contact_person_number,
+    })
+    .eq("NISN", NISN)
+    .eq("competition_id", null); // Ensure the user is not already in a competition
   if (error) {
     console.error("Error joining competition:", error);
     return { success: false, error: error.message };
@@ -62,8 +61,8 @@ export async function CheckUserCompetition({
   const supabase = createClient();
 
   const { data: existing, error: checkError } = await supabase
-    .from("users_competitions")
-    .select("NISN")
+    .from("users")
+    .select("NISN, competition_id")
     .eq("NISN", NISN)
     .maybeSingle();
 
@@ -82,7 +81,7 @@ export async function CheckWhichCompetitionTheUserJoinned({NISN}: CheckUserCompe
   const supabase = createClient();
 
   const { data: competition, error: checkError } = await supabase
-    .from("users_competitions")
+    .from("users")
     .select("competition_id")
     .eq("NISN", NISN)
     .maybeSingle();
@@ -122,8 +121,8 @@ export async function GetUsersByTeamNameAndCompetitionId(team_name: string, comp
   const supabase = createClient();
 
   const { data: userCompetitions, error } = await supabase
-    .from("users_competitions")
-    .select("user_id")
+    .from("users")
+    .select("id")
     .eq("team_name", team_name)
     .eq("competition_id", competition_id);
 
@@ -132,7 +131,7 @@ export async function GetUsersByTeamNameAndCompetitionId(team_name: string, comp
     return { users: [], error: error.message };
   }
 
-  const userIds = userCompetitions?.map((uc: { user_id: string }) => uc.user_id) || [];
+  const userIds = userCompetitions?.map((uc: { id: string }) => uc.id) || [];
 
   if (userIds.length === 0) {
     return { users: [] };

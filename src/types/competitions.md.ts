@@ -1,5 +1,4 @@
 export interface JoinCompetition{
-    user_id: string;
     competition_id: string;
     NISN: string; //NIM
     team_name: string;
