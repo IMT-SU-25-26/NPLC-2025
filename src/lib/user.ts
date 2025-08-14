@@ -45,7 +45,7 @@ export async function SignUpUser(email: string, password: string, username: stri
             email,
             password,
             options: {
-              emailRedirectTo: 'https://nplc.vercel.app/auth/calback',
+              emailRedirectTo: 'https://nplc.vercel.app/auth/callback',
               data: {
                   username: username
               }
