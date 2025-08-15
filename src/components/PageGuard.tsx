@@ -1,5 +1,5 @@
 "use client";
-import { CheckWhichCompetitionTheUserJoinned } from "@/lib/competition";
+import { CheckWhichCompetitionTheUserJoinned, CheckPageLock } from "@/lib/competition";
 import { GetCurrentUser, GetUserById } from "@/lib/user";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -12,6 +12,8 @@ export default function PageGuard({
   redirectIfRegistered,
   shouldRedirectOnClose,
   redirectTo = "/",
+  should_use_is_page_locked,
+  is_page_locked,
 }: PageGuardProps) {
   const [checking, setChecking] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
@@ -55,6 +57,15 @@ export default function PageGuard({
           setErrorMsg("You are not registered for this competition.");
           setChecking(false);
           return;
+        }
+        if(should_use_is_page_locked){
+          is_page_locked = (await CheckPageLock({ competition_id: competitionId })).locked;
+
+          if(is_page_locked){
+            setErrorMsg("This page is not accessible yet!.");
+            setChecking(false);
+            return;
+          }
         }
       }
       setFadeOut(true);

@@ -15,3 +15,7 @@ export interface Competitions{
     id: string;
     competition_name: string;
 }
+
+export interface checkPageLock{
+    competition_id: string;
+}

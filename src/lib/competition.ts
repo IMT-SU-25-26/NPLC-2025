@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/client";
 import type {
   JoinCompetition,
   CheckUserCompetition,
+  checkPageLock
 } from "@/types/competitions.md";
 
 // export async function GetAllUsers(): Promise<Users[]> {
@@ -175,4 +176,26 @@ export async function GetAllUsersInSelectedCompetition(
   }
 
   return { users: users as Users[] };
+}
+
+export async function CheckPageLock({
+  competition_id,
+}: checkPageLock): Promise<{ locked: boolean; error?: string }> {
+  const supabase = createClient();
+
+  const { data: competition, error: fetchError } = await supabase
+    .from("competitions")
+    .select("is_page_locked")
+    .eq("id", competition_id)
+    .single();
+
+  if (fetchError) {
+    console.error("Error fetching competition:", fetchError);
+    return { locked: true, error: fetchError.message };
+  }
+
+  if (competition) {
+    return { locked: competition.is_page_locked, error: undefined };
+  }
+  return { locked: true };
 }

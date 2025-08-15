@@ -3,6 +3,7 @@ import React from "react";
 import CodeEditor from "@/components/CodeEditor";
 import LanguageSelector from "@/components/LanguageSelector";
 import OutputPanel from "@/components/OutputPanel";
+import PageGuard from "@/components/PageGuard";
 
 const STARTER_CODE = {
     javascript: `Example:\n console.Log("Hello, Yenyen!");`,
@@ -60,6 +61,7 @@ export default function Page() {
   }
 
   return (
+    <PageGuard competitionId="1" should_use_is_page_locked={true} shouldRedirectOnClose={true}>
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 py-8 px-4">
       <div className="w-full max-w-3xl bg-gray-800 rounded-xl shadow-lg p-8 space-y-6">
       <h1 className="text-3xl font-bold text-center text-white mb-4">Competitive Programming (params.id)</h1>
@@ -81,5 +83,6 @@ export default function Page() {
       <OutputPanel output={output} error={error} />
       </div>
     </div>
+    </PageGuard>
   );
 }
