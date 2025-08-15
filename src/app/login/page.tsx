@@ -115,7 +115,7 @@ function AnimatedContent({
             width={400}
             height={250}
             priority
-            className="w-16 sm:w-28 mt-2 sm:mt-8 mb-8"
+            className="w-16 sm:w-35 mt-2 sm:mt-8 mb-8"
           />
 
           {/* Form */}
