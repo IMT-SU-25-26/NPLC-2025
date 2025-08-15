@@ -180,6 +180,7 @@ export async function GetUserById(userId: string): Promise<Users | null> {
   }
 }
 
+
 export async function GetUserByNISN(NISN: string): Promise<Users | null> {
   const supabase = createClient();
 

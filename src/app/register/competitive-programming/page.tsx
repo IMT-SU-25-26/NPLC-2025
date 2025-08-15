@@ -4,7 +4,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { JoinCompetition } from "@/lib/competition";
+import { CheckUserCompetition, JoinCompetition } from "@/lib/competition";
 import Popup from "@/components/Popup";
 import { GetUserByNISN } from "@/lib/user";
 import PageGuard from "@/components/PageGuard"; // <-- import PageGuard
@@ -95,20 +95,33 @@ function Page() {
       return;
     }
 
+    // Check if any member is already registered in the competition
     for (const member of members) {
-      const res = await JoinCompetition({
+      const res = await CheckUserCompetition({ NISN: member.NISN });
+      if (res && res.success === false) {
+      setLoading(false);
+      setPopupTitle("Registrasi Gagal");
+      setPopupMessage(`Salah satu member sudah terdaftar disebuah kompetisi! Satu orang hanya bisa terdaftar di satu kompetisi!`);
+      setPopupSuccess(false);
+      setPopupOpen(true);
+      return;
+      }
+    }
+
+    // All members are not registered, proceed to join competition
+    const results = await Promise.all(
+      members.map(member =>
+      JoinCompetition({
         competition_id: "1",
         NISN: member.NISN,
         team_name: teamName,
         link_twiboon: twiboon,
         school_name: school,
         contact_person_number: contact,
-      });
-      if (!res.success) {
-        success = false;
-        break;
-      }
-    }
+      })
+      )
+    );
+    success = results.every(res => res.success);
 
     setLoading(false);
 

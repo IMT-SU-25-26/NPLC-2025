@@ -5,6 +5,7 @@ import {
   CheckWhichCompetitionTheUserJoinned,
   GetCompetitionNameById,
   GetUsersByTeamNameAndCompetitionId,
+  GetAllUsersInSelectedCompetition
 } from "@/lib/competition";
 import { Users } from "@/types/users.md";
 import PageGuard from "@/components/PageGuard";
@@ -35,6 +36,13 @@ function Page() {
   const [users, setUsers] = useState<Users[] | null>(null);
   const [userError, setUserError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  
+  // State untuk Panel All Users
+  const [selectedCompetition, setSelectedCompetition] = useState<CompetitionId | "">("");
+  const [allUsers, setAllUsers] = useState<Users[] | null>(null);
+  const [allUsersError, setAllUsersError] = useState<string | null>(null);
+  const [allUsersLoading, setAllUsersLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // New state for search
 
   // Handler Panel Umum
   const handleCheck = async () => {
@@ -83,6 +91,39 @@ function Page() {
       setUserError("Tidak ada user ditemukan");
     }
   };
+  
+  // Handler untuk Panel All Users
+  const handleGetAllUsers = async () => {
+    setAllUsersError(null);
+    setAllUsers(null);
+    setSearchQuery(""); // Reset search query when fetching new data
+    if (!selectedCompetition) {
+      setAllUsersError("Pilih lomba terlebih dahulu");
+      return;
+    }
+    setAllUsersLoading(true);
+    const res = await GetAllUsersInSelectedCompetition(selectedCompetition);
+    setAllUsersLoading(false);
+    if (res.error) {
+      setAllUsersError(res.error);
+    } else if (res.users && res.users.length > 0) {
+      setAllUsers(res.users);
+    } else {
+      setAllUsersError("Tidak ada user terdaftar di lomba ini");
+    }
+  };
+  
+  // Filter users based on search query
+  const filteredUsers = allUsers 
+    ? allUsers.filter(user => {
+        const query = searchQuery.toLowerCase();
+        return (
+          (user.team_name?.toLowerCase().includes(query) || false) || 
+          (user.NISN?.toLowerCase().includes(query) || false) ||
+          (user.username?.toLowerCase().includes(query) || false)
+        );
+      })
+    : null;
 
   return (
     <PageGuard checkAdmin redirectTo="/" shouldRedirectOnClose={true}>
@@ -219,6 +260,125 @@ function Page() {
                 Type Racer
               </Link>
             </div>
+          </div>
+          
+          {/* Panel All Users from Competition - NEW */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h2 className="text-lg font-medium text-gray-700 mb-6 pb-1 border-b border-gray-200">
+              Daftar Semua Peserta Lomba
+            </h2>
+            
+            <div className="flex flex-col sm:flex-row gap-4 mb-5">
+              <select
+                value={selectedCompetition}
+                onChange={e => setSelectedCompetition(e.target.value as CompetitionId)}
+                className="px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 bg-white flex-grow"
+              >
+                <option value="">Pilih Lomba</option>
+                {Object.entries(CompetitionName).map(([id, name]) => (
+                  <option key={id} value={id}>{name}</option>
+                ))}
+              </select>
+              
+              <button
+                onClick={handleGetAllUsers}
+                className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded transition-colors sm:flex-grow-0 sm:flex-shrink-0"
+                disabled={allUsersLoading}
+              >
+                {allUsersLoading ? "Loading..." : "Tampilkan Semua User"}
+              </button>
+            </div>
+            
+            {/* Search bar - NEW */}
+            {allUsers && allUsers.length > 0 && (
+              <div className="mb-4 relative">
+                <input
+                  type="text"
+                  placeholder="Search nama tim, NISN, atau nama peserta..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            )}
+            
+            {filteredUsers && filteredUsers.length > 0 ? (
+              <div className="mt-4 overflow-x-auto">
+                <p className="text-sm text-gray-500 mb-2">
+                  Menampilkan {filteredUsers.length} dari {allUsers?.length} peserta
+                </p>
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Nama
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Email
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        NISN
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Tim
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Sekolah
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Kontak
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredUsers.map((user, idx) => (
+                      <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {user.username || "-"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {user.email || "-"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {user.NISN || "-"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {user.team_name || "-"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {user.school_name || "-"}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {user.contact_person_number || "-"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                {allUsersError ? (
+                  <div className="p-3 bg-red-50 text-red-700 rounded border border-red-100 text-sm">
+                    {allUsersError}
+                  </div>
+                ) : allUsers && searchQuery && filteredUsers?.length === 0 ? (
+                  <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian "{searchQuery}"</div>
+                ) : allUsers && allUsers.length > 0 ? (
+                  <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian</div>
+                ) : (
+                  allUsers && <div className="text-gray-500">Tidak ada user yang terdaftar di lomba ini</div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
