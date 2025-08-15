@@ -371,7 +371,7 @@ function Page() {
                     {allUsersError}
                   </div>
                 ) : allUsers && searchQuery && filteredUsers?.length === 0 ? (
-                  <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian "{searchQuery}"</div>
+                  <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian {searchQuery}</div>
                 ) : allUsers && allUsers.length > 0 ? (
                   <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian</div>
                 ) : (

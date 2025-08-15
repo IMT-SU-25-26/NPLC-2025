@@ -26,7 +26,7 @@ const Button1 = ({className, width, type, children, isDisabled = false}: Button1
     if (!buttonRef.current) return;
 
     const observer = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
         const newWidth = entry.contentRect.width;
         setCurrentWidth(newWidth);
       }

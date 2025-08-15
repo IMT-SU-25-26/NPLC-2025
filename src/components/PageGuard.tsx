@@ -13,7 +13,6 @@ export default function PageGuard({
   shouldRedirectOnClose,
   redirectTo = "/",
   should_use_is_page_locked,
-  is_page_locked,
 }: PageGuardProps) {
   const [checking, setChecking] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
@@ -58,10 +57,10 @@ export default function PageGuard({
           setChecking(false);
           return;
         }
-        if(should_use_is_page_locked){
-          is_page_locked = (await CheckPageLock({ competition_id: competitionId })).locked;
+        if (should_use_is_page_locked) {
+          const locked = (await CheckPageLock({ competition_id: competitionId })).locked;
 
-          if(is_page_locked){
+          if (locked) {
             setErrorMsg("This page is not accessible yet!.");
             setChecking(false);
             return;
@@ -72,7 +71,7 @@ export default function PageGuard({
       setTimeout(() => setChecking(false), 400);
     };
     checkAccess();
-  }, [checkAdmin, competitionId, redirectIfRegistered]);
+  }, [checkAdmin, competitionId, should_use_is_page_locked, redirectIfRegistered]);
 
   const handleClose = () => {
     setShowDenied(false);
