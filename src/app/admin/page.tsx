@@ -5,26 +5,25 @@ import {
   CheckWhichCompetitionTheUserJoinned,
   GetCompetitionNameById,
   GetUsersByTeamNameAndCompetitionId,
-  GetAllUsersInSelectedCompetition
+  GetAllUsersInSelectedCompetition,
 } from "@/lib/competition";
 import { Users } from "@/types/users.md";
 import PageGuard from "@/components/PageGuard";
 
-export enum CompetitionId {
-  CompetitiveProgramming = "1",
-  PromptGpt = "2",
-  TypeRacer = "3",
-  BusinessPlan = "4",
-}
-
-export const CompetitionName: Record<CompetitionId, string> = {
-  [CompetitionId.CompetitiveProgramming]: "Competitive Programming",
-  [CompetitionId.PromptGpt]: "Prompt GPT",
-  [CompetitionId.TypeRacer]: "Type Racer",
-  [CompetitionId.BusinessPlan]: "Business Plan",
-};
-
 function Page() {
+  enum CompetitionId {
+    CompetitiveProgramming = "1",
+    PromptGpt = "2",
+    TypeRacer = "3",
+    BusinessPlan = "4",
+  }
+
+  const CompetitionName: Record<CompetitionId, string> = {
+    [CompetitionId.CompetitiveProgramming]: "Competitive Programming",
+    [CompetitionId.PromptGpt]: "Prompt GPT",
+    [CompetitionId.TypeRacer]: "Type Racer",
+    [CompetitionId.BusinessPlan]: "Business Plan",
+  };
   // State untuk Panel Umum
   const [nisn, setNisn] = useState("");
   const [competitionId, setCompetitionId] = useState<string | null>(null);
@@ -32,13 +31,17 @@ function Page() {
   const [error, setError] = useState<string | null>(null);
 
   const [teamName, setTeamName] = useState("");
-  const [teamCompetitionId, setTeamCompetitionId] = useState<CompetitionId | "">("");
+  const [teamCompetitionId, setTeamCompetitionId] = useState<
+    CompetitionId | ""
+  >("");
   const [users, setUsers] = useState<Users[] | null>(null);
   const [userError, setUserError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  
+
   // State untuk Panel All Users
-  const [selectedCompetition, setSelectedCompetition] = useState<CompetitionId | "">("");
+  const [selectedCompetition, setSelectedCompetition] = useState<
+    CompetitionId | ""
+  >("");
   const [allUsers, setAllUsers] = useState<Users[] | null>(null);
   const [allUsersError, setAllUsersError] = useState<string | null>(null);
   const [allUsersLoading, setAllUsersLoading] = useState(false);
@@ -91,7 +94,7 @@ function Page() {
       setUserError("Tidak ada user ditemukan");
     }
   };
-  
+
   // Handler untuk Panel All Users
   const handleGetAllUsers = async () => {
     setAllUsersError(null);
@@ -112,15 +115,18 @@ function Page() {
       setAllUsersError("Tidak ada user terdaftar di lomba ini");
     }
   };
-  
+
   // Filter users based on search query
-  const filteredUsers = allUsers 
-    ? allUsers.filter(user => {
+  const filteredUsers = allUsers
+    ? allUsers.filter((user) => {
         const query = searchQuery.toLowerCase();
         return (
-          (user.team_name?.toLowerCase().includes(query) || false) || 
-          (user.NISN?.toLowerCase().includes(query) || false) ||
-          (user.username?.toLowerCase().includes(query) || false)
+          user.team_name?.toLowerCase().includes(query) ||
+          false ||
+          user.NISN?.toLowerCase().includes(query) ||
+          false ||
+          user.username?.toLowerCase().includes(query) ||
+          false
         );
       })
     : null;
@@ -154,19 +160,20 @@ function Page() {
               >
                 Cek Lomba User
               </button>
-              
+
               {competitionId && (
                 <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-100">
                   <p className="text-gray-700">User terdaftar di lomba:</p>
                   <p className="font-medium text-blue-700">
-                    {CompetitionName[competitionId as CompetitionId] || competitionName}
+                    {CompetitionName[competitionId as CompetitionId] ||
+                      competitionName}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
                     Competition ID: {competitionId}
                   </p>
                 </div>
               )}
-              
+
               {error && (
                 <div className="mt-3 p-3 bg-red-50 text-red-700 rounded border border-red-100 text-sm">
                   {error}
@@ -188,15 +195,19 @@ function Page() {
               />
               <select
                 value={teamCompetitionId}
-                onChange={e => setTeamCompetitionId(e.target.value as CompetitionId)}
+                onChange={(e) =>
+                  setTeamCompetitionId(e.target.value as CompetitionId)
+                }
                 className="w-full mt-3 px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 bg-white"
               >
                 <option value="">Pilih Lomba</option>
                 {Object.entries(CompetitionName).map(([id, name]) => (
-                  <option key={id} value={id}>{name}</option>
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
                 ))}
               </select>
-              
+
               <button
                 onClick={handleGetUsers}
                 className="mt-3 w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded transition-colors"
@@ -204,22 +215,34 @@ function Page() {
               >
                 {loading ? "Loading..." : "Dapatkan Users"}
               </button>
-              
+
               {users && (
                 <div className="mt-4 p-3 bg-gray-50 rounded border border-gray-200 text-sm">
                   <p className="font-medium mb-2">Users:</p>
                   <ul className="space-y-3">
                     {users.map((user, idx) => (
-                      <li key={idx} className="p-2 bg-white rounded border border-gray-100">
-                        <p><span className="font-medium">Nama:</span> {user.username || "-"}</p>
-                        <p><span className="font-medium">Email:</span> {user.email || "-"}</p>
-                        <p><span className="font-medium">NISN:</span> {user.NISN || "-"}</p>
+                      <li
+                        key={idx}
+                        className="p-2 bg-white rounded border border-gray-100"
+                      >
+                        <p>
+                          <span className="font-medium">Nama:</span>{" "}
+                          {user.username || "-"}
+                        </p>
+                        <p>
+                          <span className="font-medium">Email:</span>{" "}
+                          {user.email || "-"}
+                        </p>
+                        <p>
+                          <span className="font-medium">NISN:</span>{" "}
+                          {user.NISN || "-"}
+                        </p>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
-              
+
               {userError && (
                 <div className="mt-3 p-3 bg-red-50 text-red-700 rounded border border-red-100 text-sm">
                   {userError}
@@ -233,7 +256,7 @@ function Page() {
             <h2 className="text-lg font-medium text-gray-700 mb-6 pb-1 border-b border-gray-200">
               Panel Competitions
             </h2>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link
                 href="/business-plan"
@@ -261,25 +284,29 @@ function Page() {
               </Link>
             </div>
           </div>
-          
+
           {/* Panel All Users from Competition - NEW */}
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <h2 className="text-lg font-medium text-gray-700 mb-6 pb-1 border-b border-gray-200">
               Daftar Semua Peserta Lomba
             </h2>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 mb-5">
               <select
                 value={selectedCompetition}
-                onChange={e => setSelectedCompetition(e.target.value as CompetitionId)}
+                onChange={(e) =>
+                  setSelectedCompetition(e.target.value as CompetitionId)
+                }
                 className="px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 bg-white flex-grow"
               >
                 <option value="">Pilih Lomba</option>
                 {Object.entries(CompetitionName).map(([id, name]) => (
-                  <option key={id} value={id}>{name}</option>
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
                 ))}
               </select>
-              
+
               <button
                 onClick={handleGetAllUsers}
                 className="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded transition-colors sm:flex-grow-0 sm:flex-shrink-0"
@@ -288,7 +315,7 @@ function Page() {
                 {allUsersLoading ? "Loading..." : "Tampilkan Semua User"}
               </button>
             </div>
-            
+
             {/* Search bar - NEW */}
             {allUsers && allUsers.length > 0 && (
               <div className="mb-4 relative">
@@ -300,7 +327,7 @@ function Page() {
                   className="w-full px-3 py-2 rounded border border-gray-300 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500"
                 />
                 {searchQuery && (
-                  <button 
+                  <button
                     onClick={() => setSearchQuery("")}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
@@ -309,38 +336,60 @@ function Page() {
                 )}
               </div>
             )}
-            
+
             {filteredUsers && filteredUsers.length > 0 ? (
               <div className="mt-4 overflow-x-auto">
                 <p className="text-sm text-gray-500 mb-2">
-                  Menampilkan {filteredUsers.length} dari {allUsers?.length} peserta
+                  Menampilkan {filteredUsers.length} dari {allUsers?.length}{" "}
+                  peserta
                 </p>
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Nama
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Email
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         NISN
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Tim
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Sekolah
                       </th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        scope="col"
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Kontak
                       </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
                     {filteredUsers.map((user, idx) => (
-                      <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <tr
+                        key={idx}
+                        className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                      >
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                           {user.username || "-"}
                         </td>
@@ -371,11 +420,19 @@ function Page() {
                     {allUsersError}
                   </div>
                 ) : allUsers && searchQuery && filteredUsers?.length === 0 ? (
-                  <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian {searchQuery}</div>
+                  <div className="text-gray-500">
+                    Tidak ada hasil yang cocok dengan pencarian {searchQuery}
+                  </div>
                 ) : allUsers && allUsers.length > 0 ? (
-                  <div className="text-gray-500">Tidak ada hasil yang cocok dengan pencarian</div>
+                  <div className="text-gray-500">
+                    Tidak ada hasil yang cocok dengan pencarian
+                  </div>
                 ) : (
-                  allUsers && <div className="text-gray-500">Tidak ada user yang terdaftar di lomba ini</div>
+                  allUsers && (
+                    <div className="text-gray-500">
+                      Tidak ada user yang terdaftar di lomba ini
+                    </div>
+                  )
                 )}
               </div>
             )}
