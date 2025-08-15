@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-space-mono: "Space Mono", sans-serif;
   --font-exo2: "font-exo2", sans-serif;
   --font-exo2-italic: "font-exo2-italic", sans-serif;
   --font-rubik-glitch: "Rubik Glitch", sans-serif;
@@ -50,6 +51,7 @@ body {
 }
 @font-face {
   font-family: "font-space-mono";
+  font-family: "Space Mono";
   src: url("/fonts/Space_Mono/SpaceMono-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
