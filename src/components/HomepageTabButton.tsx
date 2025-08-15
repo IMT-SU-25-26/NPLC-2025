@@ -106,8 +106,8 @@ export default function CompetitionSection() {
           <Image
             src="/buttons/Register-Competition-Button.svg"
             alt="Register button"
-            width={120}
-            height={40}
+            width={100}
+            height={100}
             draggable={false}
             className="object-contain mt-4 w-45"
           />
@@ -116,59 +116,55 @@ export default function CompetitionSection() {
         </div>
       </div>
     </div>
-    
-{/* Mobile view */}
+
+    {/* Mobile view */}
 <div className="flex flex-col gap-6 sm:hidden px-4">
   {buttons.map((btn) => (
     <div
       key={btn.id}
-      className="relative w-full p-6 min-h-[140px] mb-6" // p-6 biar ada jarak & min height supaya icon + text muat
+      className="relative bg-no-repeat bg-[length:100%_100%] bg-center bg-[url('/buttons/Card.svg')] max-[340]:bg-[url('/home/max-300-bg.svg')] max-[250]:bg-[url('/home/max-250-bg.svg')] w-full overflow-hidden mx-auto p-4 gap-3 rounded-lg shadow-lg transition-transform hover:scale-105 justify-items-center"
     >
-      {/* Background card */}
-      <div className="absolute inset-0 scale-110"> 
-        <Image
-          src="/buttons/Card.svg"
-          alt="Card background"
-          fill
-          className="object-contain"
-        />
-      </div>
-
-      {/* Card content */}
-      <div className="pl-20 relative z-10 flex items-start gap-4">
+      <div className="flex items-start gap-4 max-[640]:w-[52%] max-[510]:w-[60%] max-[450]:w-[76%] max-[370]:w-[98%] max-[360]:w-[82%] max-[333]:block max-[333]:justify-items-center">
+        {/* Icon */}
+      <div className="flex-shrink-0 w-14 h-14 my-auto">
         <Image
           src={getUnselectedImage(btn.id)}
           alt={`${btn.title} icon`}
           width={100}
           height={100}
+          className="w-full h-full object-contain"
           draggable={false}
         />
-        <div className="flex flex-col w-[calc(100%-200px)] break-words">
-          <h2 className="text-[#FCF552] font-rubik-glitch text-xl mb-1">
-            {btn.title}
-          </h2>
-          <p className="text-white font-space-mono text-sm break-words">
-            {btn.desc}
-          </p>
-          <small className="text-gray-300 text-xs break-words">
-            {btn.rules}
-          </small>
-          <a href={`/register/${btn.id}`}>
+      </div>
+
+      {/* Text */}
+      <div className="flex flex-col flex-1 min-w-0 max-[333]:text-center max-[235]:w-[80%]">
+        <h2 className="text-[#FCF552] max-[370]:text-sm font-rubik-glitch text-base">
+          {btn.title}
+        </h2>
+        <p className="text-white font-space-mono text-sm max-[370]:text-xs break-words">
+          {btn.desc}
+        </p>
+        <small className="text-gray-300 text-[10px] break-words max-[370]:hidden">
+          {btn.rules}
+        </small>
+        <a href={`/register/${btn.id}`} className="mt-3 w-fit max-[333]:mx-auto ">
           <Image
             src="/buttons/Register-Competition-Button.svg"
             alt="Register button"
-            width={120}
-            height={40}
+            width={100}
+            height={100}
             draggable={false}
-            className="object-contain mt-4"
+            className="object-contain"
           />
-          </a>
-        </div>
-
+        </a>
       </div>
+      </div>
+      
     </div>
   ))}
 </div>
+
 
 </>
   );
