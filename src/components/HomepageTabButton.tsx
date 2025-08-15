@@ -122,9 +122,9 @@ export default function CompetitionSection() {
   {buttons.map((btn) => (
     <div
       key={btn.id}
-      className="relative bg-no-repeat bg-[length:100%_100%] bg-center bg-[url('/buttons/Card.svg')] max-[340]:bg-[url('/home/max-300-bg.svg')] max-[250]:bg-[url('/home/max-250-bg.svg')] w-full overflow-hidden mx-auto p-4 gap-3 rounded-lg shadow-lg transition-transform hover:scale-105 justify-items-center"
+      className="relative bg-no-repeat bg-[length:100%_100%] bg-center bg-[url('/buttons/Card.svg')] max-[333]:bg-[url('/home/max-300-bg.svg')] max-[250]:bg-[url('/home/max-250-bg.svg')] w-full overflow-hidden mx-auto p-4 gap-3 rounded-lg shadow-lg transition-transform hover:scale-105 justify-items-center"
     >
-      <div className="flex items-start gap-4 max-[640]:w-[52%] max-[510]:w-[60%] max-[450]:w-[76%] max-[370]:w-[98%] max-[360]:w-[82%] max-[333]:block max-[333]:justify-items-center">
+      <div className=" flex items-start gap-4 max-[361]:gap-2 max-[640]:w-[52%] max-[510]:w-[60%] max-[450]:w-[76%] max-[370]:w-[98%] max-[361]:w-[68%]  max-[333]:block max-[333]:justify-items-center">
         {/* Icon */}
       <div className="flex-shrink-0 w-14 h-14 my-auto">
         <Image
@@ -142,10 +142,10 @@ export default function CompetitionSection() {
         <h2 className="text-[#FCF552] max-[370]:text-sm font-rubik-glitch text-base">
           {btn.title}
         </h2>
-        <p className="text-white font-space-mono text-sm max-[370]:text-xs break-words">
+        <p className="text-white font-space-mono text-sm max-[361]:text-[10px] break-words">
           {btn.desc}
         </p>
-        <small className="text-gray-300 text-[10px] break-words max-[370]:hidden">
+        <small className="text-gray-300 text-[10px] break-words max-[382]:hidden">
           {btn.rules}
         </small>
         <a href={`/register/${btn.id}`} className="mt-3 w-fit max-[333]:mx-auto ">
